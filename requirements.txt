@@ -11,3 +11,4 @@
 # dash
 # dash-bootstrap-components
 # requests
+pip install -r requirements.txt
