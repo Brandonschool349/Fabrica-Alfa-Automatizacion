@@ -1,1 +1,13 @@
-
+# Extenciones / paquetes que seran requeridos para el proyecto
+# pandas
+# numpy
+# matplotlib
+# seaborn
+# scipy
+# scikit-learn
+# statsmodels
+# openpyxl
+# plotly
+# dash
+# dash-bootstrap-components
+# requests
