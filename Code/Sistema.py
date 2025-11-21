@@ -28,3 +28,5 @@ import statsmodels.api as sm
 from statsmodels.formula.api import ols
  
 plt.style.use('default')
+
+print("Prueba")
