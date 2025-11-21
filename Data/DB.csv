@@ -1,0 +1,25 @@
+﻿Mes,No. de Pedido,Fecha de Factura,Cliente,Responsable de producción,Ventas (MXN),Unidades producidas,Factura No.,Estado del pedido,Método de pago,Observaciones
+2024-10,PED-2401,6/10/2024,Supermercado Norte,José Pérez,"125,400","122,000",FAC-2401,Entregado,Transferencia,Producción sin retrasos
+2024-11,PED-2402,9/11/2024,Distribuidora Fría,María López,"130,800","130,000",FAC-2402,Entregado,Crédito,Demanda ligera al alza
+2024-12,PED-2403,12/12/2024,Tienda Verde,José Pérez,"155,200","156,000",FAC-2403,Entregado,Transferencia,Alta demanda navideña
+2025-01,PED-2501,8/1/2025,Supermercado Norte,María López,"118,500","115,000",FAC-2501,Entregado,Crédito,Temporada baja post-fiestas
+2025-02,PED-2502,10/2/2025,MiniMarket Sur,José Pérez,"122,000","118,000",FAC-2502,Entregado,Transferencia,Recuperación gradual
+2025-03,PED-2503,15/3/2025,Tienda Verde,María López,"140,750","135,000",FAC-2503,Entregado,Crédito,Producción eficiente
+2025-04,PED-2504,9/4/2025,Supermercado Norte,José Pérez,"138,300","134,000",FAC-2504,Entregado,Transferencia,Estabilidad en ventas
+2025-05,PED-2505,21/5/2025,Distribuidora Fría,María López,"147,600","142,000",FAC-2505,Entregado,Crédito,Flujo constante
+2025-06,PED-2506,15/6/2025,Tienda Verde,José Pérez,"153,250","148,000",FAC-2506,Entregado,Transferencia,Demanda estable
+2025-07,PED-2507,10/7/2025,Supermercado Norte,María López,"160,900","155,000",FAC-2507,Entregado,Crédito,Producción óptima
+2025-08,PED-2508,5/8/2025,Distribuidora Fría,José Pérez,"158,200","152,000",FAC-2508,Entregado,Transferencia,Ajuste en precios
+2025-09,PED-2509,11/9/2025,Tienda Verde,María López,"149,700","144,000",FAC-2509,Entregado,Crédito,Ventas ligeramente menores
+2025-10,PED-2510,8/10/2025,Supermercado Norte,José Pérez,"165,000","162,000",FAC-2510,Entregado,Transferencia,Alta demanda estacional
+2025-11,PED-2511,10/11/2025,Distribuidora Fría,María López,"170,500","168,000",FAC-2511,Entregado,Crédito,Buen cierre trimestral
+2025-12,PED-2512,17/12/2025,Tienda Verde,José Pérez,"185,000","182,000",FAC-2512,Entregado,Transferencia,Máximo histórico de ventas
+2026-01,PED-2601,9/1/2026,MiniMarket Sur,María López,"120,800","117,000",FAC-2601,Entregado,Crédito,Caída normal de temporada
+2026-02,PED-2602,12/2/2026,Supermercado Norte,José Pérez,"125,300","121,000",FAC-2602,Entregado,Transferencia,Producción recuperada
+2026-03,PED-2603,15/3/2026,Distribuidora Fría,María López,"143,900","138,000",FAC-2603,Entregado,Crédito,Buen rendimiento
+2026-04,PED-2604,8/4/2026,Tienda Verde,José Pérez,"146,200","141,000",FAC-2604,Entregado,Transferencia,Estabilidad operativa
+2026-05,PED-2605,9/5/2026,Supermercado Norte,María López,"152,800","147,000",FAC-2605,Entregado,Crédito,Producción estable
+2026-06,PED-2606,11/6/2026,Distribuidora Fría,José Pérez,"158,900","153,000",FAC-2606,Entregado,Transferencia,Buen control de inventario
+2026-07,PED-2607,13/7/2026,Tienda Verde,María López,"166,400","160,000",FAC-2607,Entregado,Crédito,Aumento moderado de pedidos
+2026-08,PED-2608,10/8/2026,Supermercado Norte,José Pérez,"170,200","165,000",FAC-2608,Entregado,Transferencia,Flujo de ventas constante
+2026-09,PED-2609,14/9/2026,Distribuidora Fría,María López,"178,500","173,000",FAC-2609,Entregado,Crédito,Cierre de año fiscal sólido
