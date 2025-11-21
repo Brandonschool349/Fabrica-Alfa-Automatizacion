@@ -15,9 +15,16 @@
 # Fecha: 2024-06-15
 # Autores: Equipo Fábrica Alfa (prototipo académico) Brandon Pedraza, Emilio Zuñiga, Juan Pablo, David Alejandro, Daniel
 
-print("prueba")
-print("Comit JP Tonpro")
-print("Prueba JP 3")
-print("Brandon C")
-print("Prueba JP 4")
-print("Prueba5")
+import os
+import sys
+import zipfile
+from datetime import datetime
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+ 
+plt.style.use('default')
