@@ -29,8 +29,6 @@ from statsmodels.formula.api import ols
  
 plt.style.use('default')
 
-print("Prueba")
-
 # Configuración / Usuario
 
 DATA_DEFAULT = "Data/Base_FabricaAlfa.xlsx"  # Cambia si tu archivo tiene otro nombre
@@ -196,5 +194,246 @@ def plot_scatter_with_regression(df, x_col, y_col, fname):
     path = save_fig(fig, fname)
     plt.close(fig)
     return path
+
+# Simulación de captura automática (sensor) - placeholder
+
+def captura_automatica_simulada(df, unidades_producidas_col='Unidades'):
+    """Simula añadir un registro (nueva fila) al DataFrame como si viniera de sensores."""
+    now = datetime.now()
+    sample_row = df.iloc[-1].copy() if not df.empty else {}
+    # Cambia fecha/mes
+    sample_row['Mes'] = now.strftime('%Y-%m')
+    # Simula pequeña variación
+    if unidades_producidas_col in sample_row:
+        sample_row[unidades_producidas_col] = int(sample_row[unidades_producidas_col] * (1 + np.random.uniform(-0.03, 0.05)))
+    return sample_row
+
+# Función principal: menú
+def main_menu():
+    df = None
+    authenticated = False
+    username = None
+    safe_print("\n=== Sistema prototipo: Fábrica Alfa (Analítica) ===\n")
+    while True:
+        safe_print("\nMenú principal:")
+        safe_print("1) Iniciar sesión")
+        safe_print("2) Cargar datos (Excel/CSV)")
+        safe_print("3) Estadísticas descriptivas (ventas / unidades)")
+        safe_print("4) Medidas de dispersión")
+        safe_print("5) Distribuciones: Binomial / Poisson / Normal")
+        safe_print("6) Intervalos de confianza y pruebas de hipótesis")
+        safe_print("7) ANOVA")
+        safe_print("8) Correlación y regresión")
+        safe_print("9) Visualizaciones (guardar PNG)")
+        safe_print("10) Simular captura automática (sensor) y añadir registro")
+        safe_print("11) Exportar resumen y empaquetar reporte")
+        safe_print("12) Salir")
+        option = input("Seleccione opción: ").strip()
+ 
+        if option == '1':
+            username = input("Usuario: ").strip()
+            pwd = input("Contraseña: ").strip()
+            if username in USERS and USERS[username] == pwd:
+                authenticated = True
+                safe_print(f"Autenticado como {username}")
+            else:
+                safe_print("Credenciales inválidas.")
+ 
+        elif option == '2':
+            path = input(f"Ruta del archivo [{DATA_DEFAULT}]: ").strip() or DATA_DEFAULT
+            try:
+                df = load_data(path)
+                df = normalize_columns(df)
+                safe_print(f"Datos cargados. Filas: {len(df)} Columnas: {len(df.columns)}")
+                safe_print("Columnas detectadas: " + ", ".join(df.columns))
+            except Exception as e:
+                safe_print(f"Error al cargar: {e}")
+ 
+        elif option == '3':
+            if df is None:
+                safe_print("Carga primero los datos (opción 2).")
+                continue
+            # Detectar columna de ventas/unidades
+            venta_col = next((c for c in df.columns if 'Venta' in c or 'Ventas' in c or 'venta' in c), None)
+            unidades_col = next((c for c in df.columns if 'Unidades' in c or 'unidad' in c.lower()), None)
+            if venta_col is None or unidades_col is None:
+                safe_print("No se encontraron columnas 'Ventas' o 'Unidades'. Revisa nombres en tu archivo.")
+                safe_print("Columnas: " + ", ".join(df.columns))
+                continue
+            safe_print("-- Ventas --")
+            t_ventas = medidas_tendencia_central(df[venta_col])
+            safe_print(t_ventas)
+            safe_print("-- Unidades --")
+            t_unidades = medidas_tendencia_central(df[unidades_col])
+            safe_print(t_unidades)
+            # Guardar resumen
+            pd.DataFrame({'Ventas': t_ventas, 'Unidades': t_unidades}).to_csv(os.path.join(OUTPUT_DIR, 'resumen_tendencia.csv'))
+ 
+        elif option == '4':
+            if df is None:
+                safe_print("Carga datos primero.")
+                continue
+            unidades_col = next((c for c in df.columns if 'Unidades' in c or 'unidad' in c.lower()), None)
+            if unidades_col is None:
+                safe_print("No se encontró columna de Unidades.")
+                continue
+            disp = medidas_dispersión(df[unidades_col])
+            safe_print("Medidas de dispersión para Unidades:")
+            safe_print(disp)
+            # Guardar
+            pd.Series(disp).to_csv(os.path.join(OUTPUT_DIR, 'dispersión_unidades.csv'))
+ 
+        elif option == '5':
+            if df is None:
+                safe_print("Carga datos primero.")
+                continue
+            safe_print("a) Binomial")
+            safe_print("b) Poisson")
+            safe_print("c) Normal")
+            sub = input("Elija (a/b/c): ").strip().lower()
+            if sub == 'a':
+                n = int(input("Número de ensayos n (ej. tamaño de muestra por lote): "))
+                p = float(input("Probabilidad de éxito p (ej. tasa de defecto por unidad): "))
+                k = input("Número exacto k (enter) o dejar vacío para ver toda la pmf: ").strip()
+                if k == '':
+                    xs, pmf = binomial_prob(n, p)
+                    dfpmf = pd.DataFrame({'k': xs, 'pmf': pmf})
+                    export_df(dfpmf, 'binomial_pmf.csv')
+                    safe_print(f"PMF guardada en output/binomial_pmf.csv")
+                else:
+                    k = int(k)
+                    pmf_k, cdf_k = binomial_prob(n, p, k)
+                    safe_print(f"P(X={k})={pmf_k:.6f} ; P(X<={k})={cdf_k:.6f}")
+            elif sub == 'b':
+                l = float(input("λ (tasa media de eventos por periodo): "))
+                k = input("k exacto (enter para PMF completo): ").strip()
+                if k == '':
+                    xs, pmf = poisson_prob(l)
+                    export_df(pd.DataFrame({'k': xs, 'pmf': pmf}), 'poisson_pmf.csv')
+                    safe_print("PMF Poisson guardada en output/poisson_pmf.csv")
+                else:
+                    k = int(k)
+                    pmf_k, cdf_k = poisson_prob(l, k)
+                    safe_print(f"P(X={k})={pmf_k:.6f} ; P(X<={k})={cdf_k:.6f}")
+            elif sub == 'c':
+                venta_col = next((c for c in df.columns if 'Venta' in c or 'Ventas' in c or 'venta' in c), None)
+                if venta_col is None:
+                    safe_print("No se encontró columna de Ventas.")
+                    continue
+                s = df[venta_col].dropna()
+                mu, sigma = s.mean(), s.std(ddof=1)
+                a = float(input("Límite inferior a: "))
+                b = float(input("Límite superior b: "))
+                prob = normal_prob_interval(mu, sigma, a, b)
+                safe_print(f"P({a} ≤ X ≤ {b}) = {prob:.6f} (N({mu:.1f},{sigma:.1f}))")
+            else:
+                safe_print("Opción inválida.")
+ 
+        elif option == '6':
+            if df is None:
+                safe_print("Carga datos primero.")
+                continue
+            venta_col = next((c for c in df.columns if 'Venta' in c or 'Ventas' in c or 'venta' in c), None)
+            if venta_col is None:
+                safe_print("No se encontró columna de Ventas.")
+                continue
+            # IC para media
+            ic = intervalo_confianza_media(df[venta_col])
+            safe_print("Intervalo de confianza (95%) para la media de ventas:")
+            safe_print(ic)
+            # Prueba de hipótesis (media = valor histórico)
+            mu0 = float(input("Probar H0: media = (introduce valor de referencia): "))
+            test = prueba_t_uno_muestra(df[venta_col], mu0=mu0)
+            safe_print("Prueba t (1 muestra):")
+            safe_print(test)
+ 
+        elif option == '7':
+            if df is None:
+                safe_print("Carga datos primero.")
+                continue
+            safe_print("ANOVA: compara medias entre grupos")
+            safe_print("Columnas disponibles: " + ", ".join(df.columns))
+            var = input("Variable numérica (ej. Ventas): ").strip()
+            group = input("Variable categórica (ej. Cliente o Turno): ").strip()
+            if var not in df.columns or group not in df.columns:
+                safe_print("Columnas inválidas.")
+                continue
+            model, table = realizar_anova(df, var, group)
+            safe_print("Tabla ANOVA:")
+            safe_print(table)
+            export_df(table.reset_index(), 'ANOVA_table.csv')
+ 
+        elif option == '8':
+            if df is None:
+                safe_print("Carga datos primero.")
+                continue
+            safe_print("Regresión y correlación")
+            safe_print("Columnas: " + ", ".join(df.columns))
+            x = input("Variable predictora (x) (ej. Unidades): ").strip()
+            y = input("Variable respuesta (y) (ej. Ventas): ").strip()
+            if x not in df.columns or y not in df.columns:
+                safe_print("Columnas inválidas.")
+                continue
+            corr = correlacion(df, x, y)
+            safe_print(f"Correlación r={corr['r']:.4f} (p={corr['pvalue']:.4f})")
+            model = regresion_lineal(df, x, y)
+            safe_print(model.summary())
+            # Guardar coeficientes
+            coef_df = pd.DataFrame({'coef': model.params})
+            export_df(coef_df.reset_index(), 'regression_coef.csv')
+            # Gráfico
+            plot_scatter_with_regression(df, x, y, 'scatter_regression.png')
+            safe_print("Gráfico guardado en output/scatter_regression.png")
+ 
+        elif option == '9':
+            if df is None:
+                safe_print("Carga datos primero.")
+                continue
+            # Histograma ventas
+            venta_col = next((c for c in df.columns if 'Venta' in c or 'Ventas' in c), None)
+            unidades_col = next((c for c in df.columns if 'Unidades' in c or 'unidad' in c.lower()), None)
+            if venta_col:
+                p1 = plot_histograma(df[venta_col], 'Histograma de Ventas', 'hist_ventas.png')
+                safe_print("Histograma ventas:", p1)
+            if unidades_col:
+                p2 = plot_histograma(df[unidades_col], 'Histograma de Unidades', 'hist_unidades.png')
+                safe_print("Histograma unidades:", p2)
+            # Pastel: empresas en las que han trabajado (si existe)
+            if 'Empresas en las que ha trabajado' in df.columns:
+                p3 = plot_pastel(df['Empresas en las que ha trabajado'], 'Empresas previas', 'pastel_empresas.png')
+                safe_print("Gráfico pastel guardado en:", p3)
+ 
+        elif option == '10':
+            if df is None:
+                safe_print("Carga datos primero.")
+                continue
+            safe_print("Simulando captura automática desde sensor...")
+            nueva = captura_automatica_simulada(df)
+            # Convertir a DF y anexar
+            df = df.append(nueva, ignore_index=True)
+            export_df(df, 'base_actualizada.csv')
+            safe_print("Nuevo registro agregado y base actualizada guardada en output/base_actualizada.csv")
+ 
+        elif option == '11':
+            # Generar resumen y empaquetar en zip
+            safe_print("Generando resumen de salida y empaquetando...")
+            files = []
+            for f in os.listdir(OUTPUT_DIR):
+                files.append(os.path.join(OUTPUT_DIR, f))
+            zipname = os.path.join(OUTPUT_DIR, f"reporte_fabrica_alfa_{datetime.now().strftime('%Y%m%d_%H%M')}.zip")
+            with zipfile.ZipFile(zipname, 'w') as zf:
+                for f in files:
+                    zf.write(f, arcname=os.path.basename(f))
+            safe_print("Reporte empaquetado en:", zipname)
+ 
+        elif option == '12':
+            safe_print("Saliendo.")
+            break
+ 
+        else:
+            safe_print("Opción inválida. Intenta de nuevo.")
+ 
+if __name__ == "__main__":
+    main_menu()
  
  
