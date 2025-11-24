@@ -5,7 +5,7 @@
 
 from fastapi import FastAPI, UploadFile, File
 import pandas as pd
-from sistema import (
+from Sistema import (
     medidas_tendencia_central,
     medidas_dispersión,
     binomial_prob,
@@ -15,6 +15,16 @@ from sistema import (
 
 app = FastAPI(title="API Fábrica Alfa")
 
+from fastapi.middleware.cors import CORSMiddleware
+
+# justo después de crear app = FastAPI(...)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500", "http://localhost:5500", "http://127.0.0.1:8000", "http://localhost:8000",],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 df_global = None  # Aquí se guardará la base cargada temporalmente
 
 
@@ -86,3 +96,13 @@ def poisson(lmbda: float):
 def normal(mu: float, sigma: float, a: float, b: float):
     prob = normal_prob_interval(mu, sigma, a, b)
     return {"probabilidad": float(prob)}
+
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/", response_class=HTMLResponse)
+def home():
+    with open("index.html", "r", encoding="utf-8") as f:
+        return f.read()
