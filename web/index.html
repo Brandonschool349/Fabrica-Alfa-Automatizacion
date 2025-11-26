@@ -35,6 +35,7 @@
         </div>
 
         <nav class="nav-list" role="navigation" aria-label="main">
+          <button id="themeToggle" class="btn btn-outline-light">☀️ Modo claro</button>
           <button class="nav-item active" data-view="dashboard"><span class="nav-ico">🏠</span><span class="nav-label">Dashboard</span></button>
           <button class="nav-item" data-view="estadisticas"><span class="nav-ico">📊</span><span class="nav-label">Estadísticas</span></button>
           <button class="nav-item" data-view="modelos"><span class="nav-ico">🧮</span><span class="nav-label">Modelos Prob.</span></button>
@@ -180,41 +181,161 @@
           </div>
         </section>
 
-        <!-- MODELOS VIEW (Gerente + Supervisor) -->
-        <section id="view-modelos" class="view-pane hidden">
-          <div class="card">
-            <h5>Modelos probabilísticos & tests avanzados</h5>
-            <div class="muted">Aquí se mostrarán imágenes generadas por el backend (matplotlib/seaborn) y resultados de ANOVA, regresión, etc.</div>
-            <div style="display:flex; gap:8px; margin-top:12px;">
-              <button id="btnANOVA" class="btn btn-outline-light">Generar ANOVA (POST)</button>
-              <button id="btnRegresion" class="btn btn-outline-light">Regresión</button>
-              <button id="btnCorrelacion" class="btn btn-outline-light">Correlación</button>
-            </div>
 
-            <div id="modelResults" style="margin-top:12px;"></div>
-          </div>
-        </section>
 
-        <!-- PRODUCCION VIEW -->
-        <section id="view-produccion" class="view-pane hidden">
-          <div class="card">
-            <h5>Control de Producción</h5>
-            <div class="muted">Estado de pedidos, desempeño por responsable, análisis de defectos.</div>
-            <div id="produccionBlock" class="muted mt-3">Sin datos.</div>
-          </div>
-        </section>
+  <!-- ========================================================= -->
+  <!-- =================  PRODUCCIÓN VIEW  ====================== -->
+  <!-- ========================================================= -->
+  <section id="view-produccion" class="view-pane hidden">
 
-        <!-- OPERARIO VIEW -->
-        <section id="view-operario" class="view-pane hidden">
-          <div class="card">
-            <h5>Área del Operario</h5>
-            <div class="muted">Vista simplificada: unidades por mes, gráficos simples y su propio rendimiento.</div>
-            <div id="operarioBlock" class="muted mt-3">Sin datos.</div>
-          </div>
-        </section>
+    <div class="grid grid-2">
 
-      </section>
+      <!-- ---- CONTROLES ---- -->
+      <div class="card">
+        <h4>Control de Producción</h4>
 
+        <div class="mt-2">
+          <label class="muted small">Variable de producción</label>
+          <select id="selectProdVar" class="form-select"></select>
+        </div>
+
+        <div class="mt-3" style="display:flex; gap:8px;">
+          <button id="btnLoadProd" class="btn btn-primary w-100">Cargar Producción</button>
+          <button id="btnClearProd" class="btn btn-outline-light w-100">Limpiar</button>
+        </div>
+
+        <div id="prodResumen" class="mt-3 muted">Sin datos.</div>
+      </div>
+
+      <!-- ---- TABLA ---- -->
+      <div class="card">
+        <h5>Registros de Producción</h5>
+        <table class="table table-dark table-striped mt-2">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Operario</th>
+              <th>Unidades</th>
+            </tr>
+          </thead>
+          <tbody id="prodTable"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ========================================================= -->
+  <!-- ===================  OPERARIO VIEW  ====================== -->
+  <!-- ========================================================= -->
+  <section id="view-operario" class="view-pane hidden">
+
+    <div class="grid grid-2">
+
+      <div class="card">
+        <h4>Registro del Operario</h4>
+
+        <div class="mt-2">
+          <label class="muted small">Nombre del operario</label>
+          <input id="opNombre" type="text" class="form-control" placeholder="Ingresa tu nombre">
+        </div>
+
+        <div class="mt-2">
+          <label class="muted small">Turno</label>
+          <select id="opTurno" class="form-select">
+            <option value="Mañana">Mañana</option>
+            <option value="Tarde">Tarde</option>
+            <option value="Noche">Noche</option>
+          </select>
+        </div>
+
+        <div class="mt-3" style="display:flex; gap:8px;">
+          <button id="btnMarcarEntrada" class="btn btn-success w-100">Registrar Entrada</button>
+          <button id="btnMarcarSalida" class="btn btn-danger w-100">Registrar Salida</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h5>Historial</h5>
+        <div id="operarioLog" class="muted small">
+          Sin registros.
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+
+      
+  <!-- ========================================================= -->
+  <!-- ==================   MODELOS VIEW   ====================== -->
+  <!-- ========================================================= -->
+  <section id="view-modelos" class="view-pane hidden">
+
+    <div class="grid grid-2">
+
+      <!-- ---- ANALISIS ANOVA / REGRESIÓN / CORRELACIÓN ---- -->
+      <div class="card">
+        <h4>Modelos Estadísticos</h4>
+        <!-- Caja de mensajes elegante -->
+        <div id="msgBox" class="alert alert-info mt-2" style="display:none;"></div>
+        <div class="muted small mt-2">Variables disponibles</div>
+        <select id="selectModelVar" class="form-select mt-2"></select>
+
+        <div class="muted small mt-3">Variable X (Regresión / Correlación)</div>
+        <select id="selectModelX" class="form-select mt-2"></select>
+
+        <div class="muted small mt-3">Variable Y (Regresión / Correlación)</div>
+        <select id="selectModelY" class="form-select mt-2"></select>
+
+        <div class="mt-3" style="display:flex; gap:8px;">
+          <button id="btnRegresion" class="btn btn-primary w-100">Regresión Lineal</button>
+          <button id="btnCorrelacion" class="btn btn-outline-light w-100">Correlación</button>
+        </div>
+
+        <div class="mt-3">
+          <button id="btnANOVA" class="btn btn-warning w-100">ANOVA</button>
+        </div>
+
+        <div id="modelResults" class="mt-3 muted">
+          Sin resultados.  
+        </div>
+      </div>
+
+      <!-- ---- BINOMIAL ---- -->
+      <div class="card">
+        <h4>Distribución Binomial</h4>
+
+        <div class="mt-2">
+          <label class="muted small">n (ensayos)</label>
+          <input id="inputBinN" type="number" class="form-control" value="10">
+        </div>
+
+        <div class="mt-2">
+          <label class="muted small">p (probabilidad)</label>
+          <input id="inputBinP" type="number" class="form-control" step="0.01" value="0.5">
+        </div>
+
+        <div class="mt-2">
+          <label class="muted small">k (éxitos)</label>
+          <input id="inputBinK" type="number" class="form-control" value="5">
+        </div>
+
+        <button id="btnCalcBinomial" class="btn btn-primary mt-3 w-100">Calcular Binomial</button>
+
+        <div class="mt-3">
+          <canvas id="chartBinomialModels"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
       <footer class="app-footer">
         Proyecto escolar — Fábrica Alfa · Equipo de Ingeniería
       </footer>
@@ -237,5 +358,6 @@
 
   <!-- Enlazamos el JS (app.js) -->
   <script src="/web/app.js"></script>
+
 </body>
 </html>

@@ -109,24 +109,18 @@ function initUI(){
     await fetchBinomial(n,p);
   });
 
-  // modelos
-  $("#btnANOVA")?.addEventListener("click", async ()=>{
-    await postANOVA();
-  });
-  $("#btnRegresion")?.addEventListener("click", async ()=>{
-    // example: open prompt for x,y
-    const x = prompt("Variable X (ej: Mes)");
-    const y = prompt("Variable Y (ej: Ventas)");
-    if(!x||!y) return;
-    await fetchRegression(x,y);
-  });
-  $("#btnCorrelacion")?.addEventListener("click", async ()=>{
-    const x = prompt("Variable X (ej: Ventas)");
-    const y = prompt("Variable Y (ej: Unidades)");
-    if(!x||!y) return;
-    await fetchCorrelation(x,y);
-  });
+ // ============================
+// MODELOS — EVENT LISTENERS
+// ============================
 
+// ANOVA usando selects
+$("#btnANOVA")?.addEventListener("click", postANOVA);
+
+// Regresión Lineal usando selects
+$("#btnRegresion")?.addEventListener("click", fetchRegressionUI);
+
+// Correlación usando selects
+$("#btnCorrelacion")?.addEventListener("click", fetchCorrelationUI);
   // file input change
   $("#fileInput")?.addEventListener("change", (e)=> {
     // optionally auto-upload or wait for uploadBtn click
@@ -336,14 +330,29 @@ function resetData(){
 
 /* populate selectors with backend columns */
 function populateColumnSelectors(cols){
-  const targets = ["#selectTend","#selectDisp","#selectQuick"];
+
+  const targets = [
+    "#selectTend",
+    "#selectDisp",
+    "#selectQuick",
+
+    // 🔥 Agregamos los nuevos selects:
+    "#selectModelVar",   // Variables disponibles (modelos)
+    "#selectModelX",     // Variable X (regresión/correlación)
+    "#selectModelY",     // Variable Y (regresión/correlación)
+
+    "#selectBinomCol",   // si tienes binomial por columna
+    "#selectProdCol"     // si tienes control de producción
+  ];
+
   targets.forEach(sel => {
-    const el = $(sel);
-    if(!el) return;
+    const el = document.querySelector(sel);
+    if(!el) return;          // Si no existe, lo ignoramos sin error
     el.innerHTML = '<option value="">-- seleccionar --</option>';
     cols.forEach(c=>{
       const o = document.createElement("option");
-      o.value = c; o.innerText = c;
+      o.value = c;
+      o.innerText = c;
       el.appendChild(o);
     });
   });
@@ -414,78 +423,119 @@ async function calcDispColumn(col){
 }
 
 /* ============================
-   Binomial / Poisson / Normal
+   ANOVA usando selects
    ============================ */
-async function fetchBinomial(n,p){
-  try {
-    const r = await fetch(`${API_BASE}/binomial?n=${n}&p=${p}`);
-    const j = await r.json();
-    if(!j || !j.k) { toast("Respuesta binomial inválida", "error"); return; }
-    renderBinomial(j.k, j.pmf);
-    toast("Binomial generada", "success");
-  } catch(e){
-    console.error(e);
-    toast("Error al generar binomial", "error");
-  }
-}
+async function postANOVA() {
+    const data = window.dataset; // tus datos cargados desde Excel
 
-async function fetchPoisson(lambda){
-  try {
-    const r = await fetch(`${API_BASE}/poisson?lambda=${encodeURIComponent(lambda)}`);
-    const j = await r.json();
-    if(!j || !j.k) { toast("Respuesta poisson inválida", "error"); return; }
-    // render similar to binomial
-    renderBinomial(j.k, j.pmf);
-    toast("Poisson generada", "success");
-  } catch(e){
-    console.error(e);
-    toast("Error Poisson", "error");
-  }
-}
-
-async function fetchNormal(mu,sigma,a,b){
-  try {
-    const r = await fetch(`${API_BASE}/normal?mu=${mu}&sigma=${sigma}&a=${a}&b=${b}`);
-    const j = await r.json();
-    toast(`Prob normal: ${j.prob}`, "success");
-    return j;
-  } catch(e){
-    console.error(e);
-    toast("Error en normal", "error");
-  }
-}
-
-/* ============================
-   ANOVA (POST), Regresion, Correlacion
-   ============================ */
-async function postANOVA(){
-  // example: send minimal payload or entire dataset depending on your API
-  // We'll attempt to POST { var: "Ventas", group_var: "Mes" } as demonstration
-  const varName = prompt("Variable dependiente (ej: Ventas)");
-  const group = prompt("Variable de grupo (ej: Mes)");
-  if(!varName || !group) return;
-  try {
-    const r = await fetch(`${API_BASE}/anova`, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify({ var: varName, group_var: group })
-    });
-    const j = await r.json();
-    // backend can return an image path or table; handle both
-    if(j.image){ // image URL
-      const img = document.createElement("img");
-      img.src = j.image;
-      document.getElementById("modelResults").appendChild(img);
-    } else {
-      // assume table rows
-      const div = document.getElementById("modelResults");
-      div.innerHTML = `<pre style="white-space:pre-wrap; color:var(--muted)">${JSON.stringify(j, null, 2)}</pre>`;
+    if (!data || data.length === 0) {
+        toast("No hay datos cargados", "error");
+        return;
     }
-    toast("ANOVA ejecutado", "success");
-  } catch(e){
-    console.error(e);
-    toast("Error ANOVA", "error");
-  }
+
+    const varName = document.getElementById("selectModelVar").value;
+    const group = document.getElementById("selectModelX").value; // X como grupo
+
+    if (!varName || !group) {
+        toast("Selecciona ambas variables", "error");
+        return;
+    }
+
+    try {
+        const resultsDiv = document.getElementById("modelResults");
+        resultsDiv.innerHTML = ""; // limpiar resultados anteriores
+
+        // enviamos los datos junto con los nombres de columna
+        const r = await fetch(`${API_BASE}/anova`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ var: varName, group_var: group, data: data })
+        });
+
+        const j = await r.json();
+
+        if (j.error) {
+            toast(j.error || "Error en ANOVA", "error");
+            return;
+        }
+
+        // mostrar resultados (imagen o tabla/JSON)
+        if (j.image) {
+            const img = document.createElement("img");
+            img.src = j.image;
+            resultsDiv.appendChild(img);
+        } else {
+            resultsDiv.innerHTML = `<pre style="white-space:pre-wrap; color:var(--muted)">${JSON.stringify(j, null, 2)}</pre>`;
+        }
+
+        toast("ANOVA ejecutado", "success");
+
+    } catch (e) {
+        console.error(e);
+        toast("Error al ejecutar ANOVA", "error");
+    }
+}
+/* ============================
+   Correlación usando selects
+   ============================ */
+async function fetchCorrelationUI(){
+    const x = document.getElementById("selectModelX").value;
+    const y = document.getElementById("selectModelY").value;
+
+    if(!x || !y){
+        toast("Selecciona variables X e Y", "error");
+        return;
+    }
+
+    try {
+        const r = await fetch(`${API_BASE}/correlacion?x=${encodeURIComponent(x)}&y=${encodeURIComponent(y)}`);
+        const j = await r.json();
+
+        const resultsDiv = document.getElementById("modelResults");
+        resultsDiv.innerHTML = `<div class="muted">r: ${j.r.toFixed(3)} — p: ${j.pvalue.toFixed(3)}</div>`;
+        toast("Correlación calculada", "success");
+    } catch(e){
+        console.error(e);
+        toast("Error en correlación", "error");
+    }
+}
+/* ============================
+   Regresión Lineal usando selects
+============================ */
+async function fetchRegressionUI(){
+    const x = document.getElementById("selectModelX").value;
+    const y = document.getElementById("selectModelY").value;
+
+    if(!x || !y){
+        toast("Selecciona variables X e Y", "error");
+        return;
+    }
+
+    try {
+        const r = await fetch(`${API_BASE}/regresion?x=${encodeURIComponent(x)}&y=${encodeURIComponent(y)}`);
+        const j = await r.json();
+
+        const resultsDiv = document.getElementById("modelResults");
+        // limpiar resultados previos
+        resultsDiv.innerHTML = "";
+
+        // mostrar coeficientes y R2 de forma legible
+        const coef = j.coeficientes;
+        const r2 = j.r2;
+        const html = `
+          <div class="muted">
+            <strong>Regresión Lineal:</strong><br>
+            ${y} = ${coef.const.toFixed(2)} + (${coef[x].toFixed(4)})·${x}<br>
+            R² = ${r2.toFixed(4)}
+          </div>
+        `;
+        resultsDiv.innerHTML = html;
+
+        toast("Regresión calculada", "success");
+    } catch(e){
+        console.error(e);
+        toast("Error en regresión", "error");
+    }
 }
 
 async function fetchCorrelation(x,y){
@@ -586,6 +636,16 @@ function renderSampleTable(rows){
 }
 
 /* ============================
+   FUNCIONES GLOBALES
+============================ */
+function showMsg(text, type="info") {
+    const box = document.getElementById("msgBox");
+    box.className = "alert alert-" + type;
+    box.innerText = text;
+    box.style.display = "block";
+}
+
+/* ============================
    START
    ============================ */
 document.addEventListener("DOMContentLoaded", ()=>{
@@ -595,4 +655,28 @@ document.addEventListener("DOMContentLoaded", ()=>{
     const p = document.querySelector(".sidebar-preview");
     if(p) p.style.display = "none";
   }
+  // Modo oscuro
+    const toggleBtn = document.getElementById("themeToggle");
+    const root = document.documentElement;
+
+    // Leer tema guardado
+    const saved = localStorage.getItem("theme");
+    if (saved === "light") {
+        root.classList.add("light-mode");
+        toggleBtn.textContent = "🌙 Modo oscuro";
+    } else {
+        toggleBtn.textContent = "☀️ Modo claro";
+    }
+
+    toggleBtn.addEventListener("click", () => {
+        root.classList.toggle("light-mode");
+
+        if (root.classList.contains("light-mode")) {
+            toggleBtn.textContent = "🌙 Modo oscuro";
+            localStorage.setItem("theme", "light");
+        } else {
+            toggleBtn.textContent = "☀️ Modo claro";
+            localStorage.setItem("theme", "dark");
+        }
+    });
 });

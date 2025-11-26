@@ -266,3 +266,170 @@ button:focus, input:focus, select:focus{ box-shadow: 0 0 0 3px rgba(106,123,255,
 }
 
 /* end of style.css */
+
+/* User CSS */
+/* ===========================
+style.css — Neumorphism oscuro (SaaS)
+=========================== */
+
+
+/* Root colors & tokens */
+:root{
+--bg-900: #06080b;
+--bg-800: #0a0f14;
+--panel: #0f1720;
+--card: #0e1620;
+--glass: rgba(255,255,255,0.02);
+--muted: #98a6b6;
+--text: #e6eef6;
+--accent: #6a7bff;
+--accent-2:#00c2ff;
+--success:#4fd18b;
+--danger: #ff6b6b;
+
+
+--radius: 12px;
+--radius-lg: 18px;
+
+
+--shadow-dark: 18px 18px 40px rgba(0,0,0,0.65);
+--shadow-soft: -10px -10px 24px rgba(255,255,255,0.02);
+--inset: inset 6px 6px 12px rgba(0,0,0,0.55);
+}
+
+
+/* Base */
+*{ box-sizing: border-box; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,var(--bg-900), var(--bg-800)); color:var(--text); font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+
+
+/* Root layout */
+.app-root{ display:flex; height:100vh; overflow:hidden; }
+
+
+/* ... CSS truncated for brevity ... */
+
+
+/* ===========================
+Extra hover polish — Selects & Inputs
+=========================== */
+.form-select:hover, .form-control:hover{
+border-color: rgba(255,255,255,0.05);
+box-shadow: inset 4px 4px 10px rgba(0,0,0,0.6), inset -3px -3px 8px rgba(255,255,255,0.03);
+}
+.form-select:active, .form-control:active{
+box-shadow: inset 6px 6px 14px rgba(0,0,0,0.65), inset -4px -4px 10px rgba(255,255,255,0.02);
+}
+
+
+/* Improved select dropdown arrow (custom SVG) */
+.form-select{
+appearance: none;
+background-image: url('data:image/svg+xml;utf8,<svg fill="%23e6eef6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+background-repeat: no-repeat;
+background-position: right 12px center;
+background-size: 18px;
+padding-right: 36px;
+}
+
+
+/* Focus lift effect */
+.form-select:focus, .form-control:focus{
+transform: translateY(-2px);
+border-color: rgba(106,123,255,0.25);
+box-shadow: inset 6px 6px 12px rgba(0,0,0,0.55), 0 0 8px rgba(106,123,255,0.25);
+}
+
+
+/* end of style.css */
+
+/* User CSS */
+/* ===========================
+style.css — Neumorphism oscuro (SaaS)
+=========================== */
+
+
+/* Root colors & tokens */
+:root{
+--bg-900: #06080b;
+--bg-800: #0a0f14;
+--panel: #0f1720;
+--card: #0e1620;
+--glass: rgba(255,255,255,0.02);
+--muted: #98a6b6;
+--text: #e6eef6;
+--accent: #6a7bff;
+--accent-2:#00c2ff;
+--success:#4fd18b;
+--danger: #ff6b6b;
+
+
+--radius: 12px;
+--radius-lg: 18px;
+
+
+--shadow-dark: 18px 18px 40px rgba(0,0,0,0.65);
+--shadow-soft: -10px -10px 24px rgba(255,255,255,0.02);
+--inset: inset 6px 6px 12px rgba(0,0,0,0.55);
+}
+
+
+/* Base */
+*{ box-sizing: border-box; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,var(--bg-900), var(--bg-800)); color:var(--text); font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+
+
+/* Root layout */
+.app-root{ display:flex; height:100vh; overflow:hidden; }
+
+
+/* ... CSS truncated for brevity ... */
+
+
+/* ===========================
+Extra hover polish — Selects & Inputs
+=========================== */
+.form-select:hover, .form-control:hover{
+border-color: rgba(255,255,255,0.05);
+box-shadow: inset 4px 4px 10px rgba(0,0,0,0.6), inset -3px -3px 8px rgba(255,255,255,0.03);
+}
+.form-select:active, .form-control:active{
+box-shadow: inset 6px 6px 14px rgba(0,0,0,0.65), inset -4px -4px 10px rgba(255,255,255,0.02);
+}
+
+
+/* Improved select dropdown arrow (custom SVG) */
+.form-select{
+appearance: none;
+background-image: url('data:image/svg+xml;utf8,<svg fill="%23e6eef6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+background-repeat: no-repeat;
+background-position: right 12px center;
+background-size: 18px;
+padding-right: 36px;
+}
+
+
+/* Focus lift effect */
+.form-select:focus, .form-control:focus{
+transform: translateY(-2px);
+border-color: rgba(106,123,255,0.25);
+box-shadow: inset 6px 6px 12px rgba(0,0,0,0.55), 0 0 8px rgba(106,123,255,0.25);
+}
+
+:root.light-mode {
+  --bg-900: #f7f9fc;
+  --bg-800: #eef1f6;
+  --panel:  #ffffff;
+  --card:   #ffffff;
+  --glass:  rgba(0,0,0,0.05);
+  --muted:  #4d5566;
+  --text:   #1a1f27;
+  --accent: #4a5dff;
+  --accent-2:#009adf;
+  --success:#1fa463;
+  --danger:#e04444;
+
+  --shadow-dark: 10px 10px 25px rgba(0,0,0,0.08);
+  --shadow-soft: -10px -10px 24px rgba(255,255,255,0.7);
+  --inset: inset 4px 4px 8px rgba(0,0,0,0.12);
+}
