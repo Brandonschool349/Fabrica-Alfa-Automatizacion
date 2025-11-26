@@ -124,6 +124,38 @@ def t_test(col: str, mu0: float):
     return prueba_t_uno_muestra(df_global[col], mu0)
 
 # ---------------------------------------------------------
+# ENDPOINT: ANOVA
+# --------------------------------------------------------- 
+
+@app.post("/anova")
+async def anova_api(payload: dict):
+    global df_global
+
+    if df_global is None:
+        return {"error": "No hay datos cargados"}
+
+    var = payload.get("var")
+    group = payload.get("group_var")
+
+    # Validar columnas
+    if var not in df_global.columns or group not in df_global.columns:
+        return {"error": "Columnas inválidas"}
+
+    salida = realizar_anova(df_global, var, group)
+    return salida
+
+# ---------------------------------------------------------
+# ENDPOINT: COLUMNAS NUMÉRICAS
+# --------------------------------------------------------- 
+
+@app.get("/columnas_numericas")
+def columnas_numericas():
+    if df_global is None:
+        return {"error": "No hay datos cargados"}
+    num_cols = df_global.select_dtypes(include='number').columns.tolist()
+    return {"numericas": num_cols}
+
+# ---------------------------------------------------------
 # ENDPOINT CORRELACIÓN
 # ---------------------------------------------------------
 @app.get("/correlacion")
