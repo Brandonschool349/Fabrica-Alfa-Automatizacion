@@ -173,3 +173,5 @@ def regresion_lineal(df, x, y):
         "coeficientes": {str(k): float(v) for k, v in model.params.items()},
         "r2": float(model.rsquared)
     }
+    
+    

@@ -283,30 +283,59 @@ async function uploadFile(){
     toast("Solo Gerente puede subir archivos", "error");
     return;
   }
+
   const input = $("#fileInput");
-  if(!input || !input.files || input.files.length === 0){ toast("Selecciona un archivo primero", "error"); return; }
+  if(!input || !input.files || input.files.length === 0){
+    toast("Selecciona un archivo primero", "error");
+    return;
+  }
+
   const file = input.files[0];
   const fd = new FormData();
   fd.append("archivo", file);
+
   $("#uploadMsg").innerText = "Cargando archivo...";
+
   try {
     const res = await fetch(`${API_BASE}/cargar`, { method: "POST", body: fd });
     const j = await res.json();
+    console.log("RESPUESTA /cargar:", j);
+
     if(j.mensaje && j.columnas){
+
       STATE.raw = j;
+
+      // guardar dataset crudo del servidor
+      window.dataset = j.data || [];
+
+      // convertir columna Mes (si existe)
+      window.dataset = window.dataset.map(r => {
+        if (r["Mes"]) {
+          const fecha = new Date(r["Mes"]);
+          if (!isNaN(fecha)) {
+            // convertir "2023-01-01" → 1
+            r["Mes"] = fecha.getMonth() + 1;
+          }
+        }
+        return r;
+      });
+
       $("#uploadMsg").innerText = `${j.mensaje} — columnas: ${j.columnas.join(", ")}`;
       toast("Archivo cargado", "success");
+
       populateColumnSelectors(j.columnas);
-      // attempt to fetch ventas/unidades arrays if available
+
       await tryFetchArrays();
-      // update KPIs
+
       $("#kpiCols").innerText = j.columnas.join(", ");
       $("#kpiRecords").innerText = j.registros || 0;
+
     } else {
       console.warn("Respuesta inesperada /cargar", j);
       $("#uploadMsg").innerText = "Respuesta inesperada del servidor";
       toast("Respuesta inesperada al cargar", "error");
     }
+
   } catch (err){
     console.error(err);
     $("#uploadMsg").innerText = "Error al cargar archivo (ver consola)";

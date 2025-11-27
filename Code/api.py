@@ -42,28 +42,49 @@ app.add_middleware(
 # ---------------------------------------------------------
 df_global = None  # Se carga aquí la base de datos temporal
 
-# ---------------------------------------------------------
-# ENDPOINT: CARGAR ARCHIVO
-# ---------------------------------------------------------
 @app.post("/cargar")
 async def cargar(archivo: UploadFile = File(...)):
     global df_global
 
-    if archivo.filename.endswith(".csv"):
-        df_global = pd.read_csv(archivo.file)
-    elif archivo.filename.endswith(".xlsx") or archivo.filename.endswith(".xls"):
-        df_global = pd.read_excel(archivo.file)
-    else:
-        return {"error": "Formato no soportado"}
+    content = await archivo.read()
 
-    # Normalizar nombres
+    try:
+        import io
+
+        if archivo.filename.lower().endswith(".csv"):
+            df_global = pd.read_csv(io.BytesIO(content))
+
+        elif archivo.filename.lower().endswith(".xlsx") or archivo.filename.lower().endswith(".xls"):
+            df_global = pd.read_excel(io.BytesIO(content))
+
+        else:
+            return {"error": "Formato no soportado"}
+
+    except Exception as e:
+        return {"error": f"Error leyendo archivo: {str(e)}"}
+
+    # Normalizar columnas
     df_global.columns = df_global.columns.str.strip()
     df_global = normalize_columns(df_global)
+
+    # CORRECCIÓN: eliminar columnas duplicadas
+    df_global = df_global.loc[:, ~df_global.columns.duplicated()]
+
+    # CORRECCIÓN IMPORTANTE: reemplazar NaN
+    df_global = df_global.fillna("N/A")
+
+    # Crear muestra
+    try:
+        sample = df_global.head(8).to_dict(orient="records")
+    except Exception as e:
+        sample = []
+        print("Error convirtiendo sample:", e)
 
     return {
         "mensaje": "Archivo cargado correctamente",
         "columnas": list(df_global.columns),
-        "filas": len(df_global)
+        "registros": len(df_global),
+        "muestra": sample
     }
 
 # ---------------------------------------------------------
@@ -126,24 +147,29 @@ def t_test(col: str, mu0: float):
 # ---------------------------------------------------------
 # ENDPOINT: ANOVA
 # --------------------------------------------------------- 
-
 @app.post("/anova")
 async def anova_api(payload: dict):
     import pandas as pd
-    data = payload.get("data")
+
+    rows = payload.get("data")
     var = payload.get("var")
     group = payload.get("group_var")
 
-    if data is None:
+    if rows is None:
         return {"error": "No hay datos enviados"}
 
-    df = pd.DataFrame(data)
+    # reconstruir DataFrame CORRECTAMENTE
+    try:
+        df = pd.DataFrame(rows[1:], columns=rows[0])
+    except:
+        return {"error": "Formato de datos inválido"}
+
     try:
         salida = realizar_anova(df, var, group)
         return salida
     except Exception as e:
         return {"error": str(e)}
-
+    
 # ---------------------------------------------------------
 # ENDPOINT: COLUMNAS NUMÉRICAS
 # --------------------------------------------------------- 
