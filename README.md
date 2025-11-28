@@ -60,7 +60,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
   <li>Trazabilidad e integración total.</li>
 </ul>
 
-<h3>✔ Módulos actuales</h3>
+<h3>✔ Módulos actuales (esenciales)</h3>
 <ul>
   <li>Login</li>
   <li>Carga de archivos</li>
@@ -75,10 +75,10 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
   <li>Modo día/noche</li>
 </ul>
 
-<h3>⏳ Módulos en desarrollo</h3>
+<h3>⏳ Módulos en desarrollo </h3>
 <ul>
-  <li>Registro de operario</li>
-  <li>Control de producción</li>
+  <li>Registro de operario (Listo, pero no conectado a una base de datos)</li>
+  <li>Control de producción (Listo, pero no conectado a una base de datos)</li>
   <li>Módulo de reportes</li>
   <li>Alertas automáticas</li>
 </ul>
