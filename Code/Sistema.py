@@ -1,7 +1,6 @@
-# ============================================================
+
 # Sistema.py - Versión compatible con FastAPI
 # Limpieza total de valores numpy → float para evitar errores
-# ============================================================
 
 import os
 import numpy as np
@@ -13,9 +12,7 @@ import statsmodels.api as sm
 from statsmodels.formula.api import ols
 from datetime import datetime
 
-# ------------------------------
 # Normalizar nombres de columnas
-# ------------------------------
 def normalize_columns(df):
     df.columns = df.columns.str.strip()
     rename_map = {}
@@ -36,9 +33,7 @@ def normalize_columns(df):
     return df
 
 
-# -----------------------------------------
 # Medidas de tendencia totalmente seguras
-# -----------------------------------------
 def medidas_tendencia_central(series):
     s = series.dropna()
 
@@ -53,9 +48,7 @@ def medidas_tendencia_central(series):
     }
 
 
-# ------------------------------------------------
 # Medidas de dispersión SEGURAS (solo floats)
-# ------------------------------------------------
 def medidas_dispersión(series):
     s = series.dropna()
 
@@ -73,20 +66,16 @@ def medidas_dispersión(series):
         "coef_var": cv
     }
 
-
-# ------------------
-# Binomial (seguro)
-# ------------------
+   
+# Binomial (seguro)  
 def binomial_prob(n, p):
     xs = np.arange(0, n + 1)
     pmf = stats.binom.pmf(xs, n, p)
 
     return xs.tolist(), [float(v) for v in pmf]
 
-
-# ------------------
-# Poisson (seguro)
-# ------------------
+  
+# Poisson (seguro)  
 def poisson_prob(lmbda):
     max_k = max(20, int(lmbda * 3))
     xs = np.arange(0, max_k)
@@ -95,17 +84,13 @@ def poisson_prob(lmbda):
     return xs.tolist(), [float(v) for v in pmf]
 
 
-# ------------------------------
 # Normal: intervalo [a, b]
-# ------------------------------
 def normal_prob_interval(mu, sigma, a, b):
     prob = stats.norm.cdf(b, mu, sigma) - stats.norm.cdf(a, mu, sigma)
     return float(prob)
 
 
-# -----------------------
 # Intervalo de confianza
-# -----------------------
 def intervalo_confianza_media(series, alpha=0.05):
     s = series.dropna()
     n = len(s)
@@ -126,9 +111,7 @@ def intervalo_confianza_media(series, alpha=0.05):
     }
 
 
-# ------------------------
 # Prueba t de 1 muestra
-# ------------------------
 def prueba_t_uno_muestra(series, mu0=0, alpha=0.05):
     s = series.dropna()
     tstat, pvalue = stats.ttest_1samp(s, popmean=mu0)
@@ -140,9 +123,7 @@ def prueba_t_uno_muestra(series, mu0=0, alpha=0.05):
     }
 
 
-# ------------------------
 # ANOVA compatible
-# ------------------------
 def realizar_anova(df, var, group_var):
     formula = f"{var} ~ C({group_var})"
     model = ols(formula, data=df).fit()
@@ -152,9 +133,7 @@ def realizar_anova(df, var, group_var):
     return table2.to_dict(orient="records")
 
 
-# ------------------------
 # Correlación y regresión
-# ------------------------
 def correlacion(df, x, y):
     s = df[[x, y]].dropna()
     r, p = stats.pearsonr(s[x], s[y])

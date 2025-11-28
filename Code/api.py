@@ -1,6 +1,5 @@
-# =========================================================
+ 
 # API Oficial de Fábrica Alfa (Backend del Sistema)
-# =========================================================
 
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,9 +25,9 @@ from sistema import (
 
 app = FastAPI(title="API Fábrica Alfa")
 
-# ---------------------------------------------------------
+ 
 # CORS
-# ---------------------------------------------------------
+ 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -37,15 +36,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ---------------------------------------------------------
+ 
 # VARIABLE GLOBAL
-# ---------------------------------------------------------
+ 
 df_global = None
 
 
-# =========================================================
-#               📌 CORRECCIÓN PRINCIPAL
-# =========================================================
+ 
+# CORRECCIÓN PRINCIPAL
 def reparar_tipos(df):
     """
     Intenta convertir columnas que parecen numéricas a tipos numéricos,
@@ -60,9 +58,9 @@ def reparar_tipos(df):
             pass
     return df
 
-# ---------------------------------------------------------
+ 
 # CARGA DE ARCHIVO
-# ---------------------------------------------------------
+ 
 @app.post("/cargar")
 async def cargar(archivo: UploadFile = File(...)):
     global df_global
@@ -115,9 +113,9 @@ async def cargar(archivo: UploadFile = File(...)):
     if "Mes" in df_global.columns:
         df_global["Mes"] = df_global["Mes"].astype("category")
 
-    # -----------------------------------------------------
+     
     # DETECTAR TIPOS PARA ANOVA / REGRESIÓN / CORRELACIÓN
-    # -----------------------------------------------------
+     
     types = {}
     for col in df_global.columns:
         if pd.api.types.is_numeric_dtype(df_global[col]):
@@ -125,9 +123,9 @@ async def cargar(archivo: UploadFile = File(...)):
         else:
             types[col] = "string"
 
-    # -----------------------------------------------------
+     
     # CREAR SAMPLE SEGURO PARA JSON
-    # -----------------------------------------------------
+     
     safe_df = df_global.astype(object).where(pd.notnull(df_global), None)
     sample = safe_df.head(8).to_dict(orient="records")
 
@@ -139,9 +137,9 @@ async def cargar(archivo: UploadFile = File(...)):
         "columnTypes": types
     }
 
-# ---------------------------------------------------------
+ 
 # TENDENCIA
-# ---------------------------------------------------------
+ 
 @app.get("/tendencia/{col}")
 def tendencia(col: str):
     if df_global is None:
@@ -149,9 +147,9 @@ def tendencia(col: str):
     return medidas_tendencia_central(df_global[col])
 
 
-# ---------------------------------------------------------
+ 
 # DISPERSIÓN
-# ---------------------------------------------------------
+ 
 @app.get("/dispersion/{col}")
 def dispersion(col: str):
     if df_global is None:
@@ -159,9 +157,9 @@ def dispersion(col: str):
     return medidas_dispersión(df_global[col])
 
 
-# ---------------------------------------------------------
+ 
 # ANOVA
-# ---------------------------------------------------------
+ 
 @app.post("/anova")
 async def anova_api(payload: dict):
     import pandas as pd
@@ -174,9 +172,9 @@ async def anova_api(payload: dict):
     if rows is None:
         return {"error": "No hay datos enviados"}
 
-    # --------------------------------------------------
-    # 🚀 DETECCIÓN AUTOMÁTICA DEL FORMATO RECIBIDO
-    # --------------------------------------------------
+     
+    #  DETECCIÓN AUTOMÁTICA DEL FORMATO RECIBIDO
+     
 
     try:
         # Caso 1: lista de diccionarios (lo ideal)
@@ -204,15 +202,15 @@ async def anova_api(payload: dict):
     except Exception as e:
         return {"error": f"Formato de datos inválido: {str(e)}"}
 
-    # --------------------------------------------------
+     
     # Ejecutar ANOVA
-    # --------------------------------------------------
+     
     try:
         salida = realizar_anova(df, var, group)
 
-        # --------------------------------------------------
-        # 🔥 FIX CRÍTICO → Convertir NaN / inf a None (JSON safe)
-        # --------------------------------------------------
+         
+        # FIX CRÍTICO → Convertir NaN / inf a None (JSON safe)
+         
         def fix_json(obj):
             if isinstance(obj, float) and (np.isnan(obj) or np.isinf(obj)):
                 return None
@@ -229,9 +227,8 @@ async def anova_api(payload: dict):
 
 
     
-# ---------------------------------------------------------
+ 
 # (Los demás endpoints quedan igual)
-# ---------------------------------------------------------
 
 @app.get("/columnas_numericas")
 def columnas_numericas():
@@ -261,9 +258,9 @@ def dataarray(col: str):
         return {"error": "No hay datos cargados"}
     return df_global[col].dropna().tolist()
 
-# ---------------------------------------------------------
+ 
 # BINOMIAL
-# ---------------------------------------------------------
+ 
 @app.get("/binomial")
 def binomial_api(n:int, p:float):
     import math
@@ -284,9 +281,9 @@ def binomial_api(n:int, p:float):
         "varianza": varianza
     }
 
-# ---------------------------------------------------------
+ 
 # SERVIR WEB
-# ---------------------------------------------------------
+ 
 WEB_PATH = r"C:\Estadistica y probabilidad para ciencia de datos\Fabrica Alfa\Web"
 app.mount('/web', StaticFiles(directory=WEB_PATH), name='web')
 

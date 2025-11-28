@@ -1,9 +1,7 @@
 // app.js — Frontend logic for Fábrica Alfa
 // Assumes index.html and style.css are present, Chart.js loaded, and backend at API_BASE
 
-/* ============================
-   CONFIG
-   ============================ */
+/*  CONFIG */
 const API_BASE = "http://127.0.0.1:8000"; // tu API local
 const PREVIEW_IMAGE = "./mnt/data/db883e4d-50fb-45de-acfb-6025188e3e99.png"; // ruta local de la captura que subiste
 
@@ -19,9 +17,7 @@ let STATE = {
 let chartBinomialStats = null;     
 let chartBinomialModels = null;
 
-/* ============================
-   DOM helpers
-   ============================ */
+/*  DOM helpers */
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
@@ -54,9 +50,7 @@ function toast(msg, type = "info", ttl = 3500) {
   }, ttl);
 }
 
-/* ============================
-   Initialization
-   ============================ */
+/*  Initialization */
 function initUI(){
   // attach preview image
   const img = document.querySelector(".preview-img");
@@ -129,10 +123,8 @@ document.getElementById("btnCalcBinomial")?.addEventListener("click", () => {
         "binomialModelsOutput"   // div donde quieres poner resultados (ponlo tú)
     );
 });
-
- // ============================
-// MODELOS — EVENT LISTENERS
-// ============================
+ 
+// MODELOS — EVENT LISTENERS 
 
 // ANOVA usando selects
 $("#btnANOVA")?.addEventListener("click", postANOVA);
@@ -157,9 +149,7 @@ $("#btnCorrelacion")?.addEventListener("click", fetchCorrelationUI);
   switchView("dashboard");
 }
 
-/* ============================
-   Navigation & Roles
-   ============================ */
+/*  Navigation & Roles */
 function switchView(view){
   // hide all panes
   $$(".view-pane").forEach(p => { p.classList.add("hidden"); p.classList.remove("active"); });
@@ -221,9 +211,7 @@ function showUploadControls(show){
   if(upMsg && !show) upMsg.innerText = "Solo Gerente puede subir archivos";
 }
 
-/* ============================
-   AUTH (simple, client-side)
-   ============================ */
+/*  AUTH (simple, client-side) */
 function loginFromModal(){
   const u = $("#loginUser").value.trim();
   const p = $("#loginPass").value.trim();
@@ -277,9 +265,7 @@ function checkLogin(){
     $("#loginModal").classList.remove("hidden");
   }
 }
-/* ============================
-   API helpers & ping
-   ============================ */
+/*  API helpers & ping */
 async function pingAPI(){
   try {
     const r = await fetch(`${API_BASE}/openapi.json`);
@@ -296,9 +282,7 @@ async function pingAPI(){
   }
 }
 
-/* ============================
-   UPLOAD (Gerente only)
-   ============================ */
+/*  UPLOAD (Gerente only) */
 async function uploadFile(){
   if(!STATE.role || !STATE.role.toLowerCase().startsWith("ger")){
     toast("Solo Gerente puede subir archivos", "error");
@@ -327,7 +311,7 @@ async function uploadFile(){
       STATE.raw = j;
 
       // guardar dataset crudo del servidor
-      // ---------- FIX: aceptar j.data o j.muestra ----------
+      // FIX: aceptar j.data o j.muestra 
       window.dataset = j.data || j.muestra || [];
 
       // si backend devolvió muestra, renderizar tabla preview
@@ -422,9 +406,7 @@ function populateColumnSelectors(cols){
 }
 
 
-/* ============================
-   Arrays fetch (for charts)
-   ============================ */
+/*  Arrays fetch (for charts) */
 async function tryFetchArrays(){
   if(!STATE.raw || !STATE.raw.columnas) return;
   const cols = STATE.raw.columnas;
@@ -450,9 +432,7 @@ async function tryFetchArrays(){
   }
 }
 
-/* ============================
-   Tendencia central & dispersión (via API)
-   ============================ */
+/*  Tendencia central & dispersión (via API) */
 async function calcTendColumn(col){
   try {
     const r = await fetch(`${API_BASE}/tendencia/${encodeURIComponent(col)}`);
@@ -486,9 +466,7 @@ async function calcDispColumn(col){
   }
 }
 
-/* ============================
-   ANOVA usando selects
-   ============================ */
+/*  ANOVA usando selects */
 async function postANOVA() {
     const data = window.dataset; // datos cargados desde Excel
     console.log("Datos para ANOVA:", data);
@@ -566,9 +544,7 @@ resultsDiv.innerHTML = tabla;
     }
 }
 
-/* ============================
-   Correlación usando selects
-   ============================ */
+/*  Correlación usando selects */
 async function fetchCorrelationUI(){
     const x = document.getElementById("selectModelX").value;
     const y = document.getElementById("selectModelY").value;
@@ -590,9 +566,7 @@ async function fetchCorrelationUI(){
         toast("Error en correlación", "error");
     }
 }
-/* ============================
-   Regresión Lineal usando selects
-============================ */
+/*  Regresión Lineal usando selects */
 async function fetchRegressionUI(){
     const x = document.getElementById("selectModelX").value;
     const y = document.getElementById("selectModelY").value;
@@ -648,9 +622,7 @@ async function fetchRegression(x,y){
   } catch(e){ console.error(e); toast("Error regresión", "error"); }
 }
 
-/* ============================
-   Charts rendering
-   ============================ */
+/*  Charts rendering */
 function destroyChart(key){
   if(STATE.charts[key]){
     STATE.charts[key].destroy();
@@ -692,9 +664,7 @@ function renderHist(arr){
   });
 }
 
-/* ============================
-   UTIL: CSV preview (if backend returns small sample)
-   ============================ */
+/* UTIL: CSV preview (if backend returns small sample) */
 function renderSampleTable(rows){
   // rows = array of objects
   if(!rows || !rows.length) return;
@@ -716,9 +686,7 @@ function renderSampleTable(rows){
   container.appendChild(table);
 }
 
-/* ============================
-   FUNCIONES GLOBALES
-============================ */
+/*  FUNCIONES GLOBALES */
 function showMsg(text, type="info") {
     const box = document.getElementById("msgBox");
     box.className = "alert alert-" + type;
@@ -779,10 +747,8 @@ function populateModelSelects(cols, types) {
         });
     }
 }
-
-// ===========================
+  
 // BINOMIAL UNIVERSAL
-// ===========================
 async function calcularBinomialUniversal(n, p, canvasID, outputDivID) {
     try {
         const r = await fetch(`${API_BASE}/binomial?n=${n}&p=${p}`);
@@ -796,9 +762,8 @@ async function calcularBinomialUniversal(n, p, canvasID, outputDivID) {
         const canvas = document.getElementById(canvasID);
         const ctx = canvas.getContext("2d");
 
-        // =====================================
-        // 🔥 DESTRUIR GRÁFICA PREVIA
-        // =====================================
+ 
+        // DESTRUIR GRÁFICA PREVIA  
         if (canvasID === "chartBinomialStats") {
             if (chartBinomialStats) chartBinomialStats.destroy();
         }
@@ -806,9 +771,8 @@ async function calcularBinomialUniversal(n, p, canvasID, outputDivID) {
             if (chartBinomialModels) chartBinomialModels.destroy();
         }
 
-        // =====================================
-        // 🔥 CREAR NUEVA GRÁFICA
-        // =====================================
+  
+        // CREAR NUEVA GRÁFICA
         const newChart = new Chart(ctx, {
             type: "bar",
             data: {
@@ -818,7 +782,7 @@ async function calcularBinomialUniversal(n, p, canvasID, outputDivID) {
                 data: j.pmf,
                 backgroundColor: j.k.map((value, idx) =>
                     idx === Number(document.getElementById("inputBinK").value)
-                        ? "red" // 🔥 barra resaltada cuando es k
+                        ? "red" //  barra resaltada cuando es k
                         : "rgba(54, 162, 235, 0.5)" // barras normales
                 )
             }]
@@ -835,9 +799,8 @@ async function calcularBinomialUniversal(n, p, canvasID, outputDivID) {
             chartBinomialModels = newChart;
         }
 
-        // =====================================
-        // TEXTO / RESULTADOS
-        // =====================================
+  
+        // TEXTO / RESULTADOS  
         document.getElementById(outputDivID).innerHTML = `
             <span class="muted">
                 Media = ${j.media.toFixed(3)} —
@@ -853,9 +816,8 @@ async function calcularBinomialUniversal(n, p, canvasID, outputDivID) {
     }
 }
 
-// ===========================
-// BINOMIAL (Modelos)
-// ===========================
+ 
+// BINOMIAL (Modelos) 
 async function calcularBinomialModelos(n, p, k) {
     try {
         const r = await fetch(`${API_BASE}/binomial?n=${n}&p=${p}`);
@@ -910,9 +872,8 @@ async function calcularBinomialModelos(n, p, k) {
     }
 }
 
-// ===========================
-// DISTRIBUCIÓN POISSON (barra o línea con puntos y k resaltado)
-// ===========================
+ 
+// DISTRIBUCIÓN POISSON (barra o línea con puntos y k resaltado) 
 document.getElementById("btnCalcPoisson")?.addEventListener("click", ()=>{
   const lambda = parseFloat(document.getElementById("inputPoissonLambda").value);
   const k = parseInt(document.getElementById("inputPoissonK").value);
@@ -948,7 +909,7 @@ document.getElementById("btnCalcPoisson")?.addEventListener("click", ()=>{
       datasets: [{
         label: "P(X=k)",
         data,
-        // 🔥 Configuración según tipo
+        //  Configuración según tipo
         backgroundColor: chartType === 'bar'
           ? labels.map(i => i === k ? 'red' : 'rgba(13,110,253,0.5)')
           : 'rgba(13,110,253,0.3)',
@@ -968,9 +929,9 @@ document.getElementById("btnCalcPoisson")?.addEventListener("click", ()=>{
   });
 });
 
-/* ============================
+/*  
    START
-   ============================ */
+     */
 document.addEventListener("DOMContentLoaded", ()=>{
   initUI();
   // If preview image missing, hide preview container
@@ -1003,9 +964,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
         }
     });
     
-// ===========================
+//  
 // BÚSQUEDA SIDEBAR
-// ===========================
+//  
 const searchInput = document.getElementById("sidebarSearch");
 
 searchInput?.addEventListener("input", (e) => {

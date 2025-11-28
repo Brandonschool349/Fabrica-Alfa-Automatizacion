@@ -1,6 +1,4 @@
-/* ===========================
-   style.css — Neumorphism oscuro (SaaS)
-   =========================== */
+/* style.css — Neumorphism oscuro (SaaS) */
 
 /* Root colors & tokens */
 :root{
@@ -31,9 +29,9 @@ html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,
 /* Root layout */
 .app-root{ display:flex; height:100vh; overflow:hidden; }
 
-/* ============================
+/*   
    SIDEBAR
-   ============================ */
+      */
 .sidebar{
   width: 270px;
   min-width:240px;
@@ -104,9 +102,9 @@ html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,
 .sidebar-actions .btn{ border-radius:8px; padding:6px 8px; font-size:0.85rem; }
 .api-status{ color:var(--muted); margin-top:6px; font-size:0.85rem; }
 
-/* ============================
+/*   
    MAIN CONTENT
-   ============================ */
+      */
 .main-content{ flex:1; padding:22px; overflow:auto; display:flex; flex-direction:column; gap:14px; }
 
 /* Topbar */
@@ -209,17 +207,13 @@ html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,
 /* Footer */
 .app-footer{ color:var(--muted); text-align:center; padding:8px 0; }
 
-/* ============================
-   VIEW: ESTADISTICAS / MODELOS
-   ============================ */
+/* VIEW: ESTADISTICAS / MODELOS */
 #chartBinomial{ width:100%; height:160px; }
 
 /* Model results placeholder styling */
 #modelResults img{ max-width:100%; border-radius:10px; display:block; margin-top:8px; border:1px solid rgba(255,255,255,0.02); }
 
-/* ============================
-   LOGIN MODAL
-   ============================ */
+/* LOGIN MODAL */
 .login-modal{
   position: fixed; inset:0; display:flex; align-items:center; justify-content:center;
   background: linear-gradient(180deg, rgba(3,6,10,0.6), rgba(3,6,10,0.6));
@@ -235,9 +229,7 @@ html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,
 .login-card h3{ color: #eaf0ff; margin:0 0 8px 0; }
 .login-card .form-control{ margin-top:6px; }
 
-/* ============================
-   RESPONSIVE
-   ============================ */
+/* RESPONSIVE */
 @media (max-width:1000px){
   .sidebar{ display:none; width:0; min-width:0; }
   .main-content{ padding:16px; }
@@ -245,15 +237,11 @@ html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,
   .chart-card canvas{ height:200px !important; }
 }
 
-/* ============================
-   Tiny transitions & accessibility
-   ============================ */
+/* Tiny transitions & accessibility */
 a, button{ transition: all .12s ease; outline:none; }
 button:focus, input:focus, select:focus{ box-shadow: 0 0 0 3px rgba(106,123,255,0.08); border-color: rgba(106,123,255,0.14); }
 
-/* ============================
-   Misc helpers for content generation
-   ============================ */
+/* Misc helpers for content generation */
 .muted { color:var(--muted); }
 .metric { font-weight:700; color:#fff; font-size:1.05rem; margin-top:6px; }
 
@@ -268,9 +256,7 @@ button:focus, input:focus, select:focus{ box-shadow: 0 0 0 3px rgba(106,123,255,
 /* end of style.css */
 
 /* User CSS */
-/* ===========================
-style.css — Neumorphism oscuro (SaaS)
-=========================== */
+/* style.css — Neumorphism oscuro (SaaS) */
 
 
 /* Root colors & tokens */
@@ -310,9 +296,7 @@ html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,
 /* ... CSS truncated for brevity ... */
 
 
-/* ===========================
-Extra hover polish — Selects & Inputs
-=========================== */
+/* Extra hover polish — Selects & Inputs */
 .form-select:hover, .form-control:hover{
 border-color: rgba(255,255,255,0.05);
 box-shadow: inset 4px 4px 10px rgba(0,0,0,0.6), inset -3px -3px 8px rgba(255,255,255,0.03);
@@ -341,12 +325,8 @@ box-shadow: inset 6px 6px 12px rgba(0,0,0,0.55), 0 0 8px rgba(106,123,255,0.25);
 }
 
 
-/* end of style.css */
-
 /* User CSS */
-/* ===========================
-style.css — Neumorphism oscuro (SaaS)
-=========================== */
+/* style.css — Neumorphism oscuro (SaaS) */
 
 
 /* Root colors & tokens */
@@ -386,9 +366,7 @@ html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,
 /* ... CSS truncated for brevity ... */
 
 
-/* ===========================
-Extra hover polish — Selects & Inputs
-=========================== */
+/* Extra hover polish — Selects & Inputs */
 .form-select:hover, .form-control:hover{
 border-color: rgba(255,255,255,0.05);
 box-shadow: inset 4px 4px 10px rgba(0,0,0,0.6), inset -3px -3px 8px rgba(255,255,255,0.03);
