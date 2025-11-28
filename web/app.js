@@ -987,4 +987,3 @@ searchInput?.addEventListener("input", (e) => {
   });
 });
 });
-
