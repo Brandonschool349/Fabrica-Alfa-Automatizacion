@@ -348,6 +348,37 @@
         </div>
         </div>
       </div>
+      
+           <!-- ---- POISSON (MODELOS) ---- -->
+    <div class="card">
+      <h4>Distribución Poisson</h4>
+
+      <div class="mt-2">
+        <label class="muted small">λ (media)</label>
+        <input id="inputPoissonLambda" type="number" class="form-control" value="5">
+      </div>
+
+      <div class="mt-2">
+        <label class="muted small">k (eventos)</label>
+        <input id="inputPoissonK" type="number" class="form-control" value="2">
+      </div>
+
+      <button id="btnCalcPoisson" class="btn btn-primary mt-3 w-100">
+        Calcular Poisson
+      </button>
+
+      <div class="mt-3">
+        <canvas id="chartPoisson"></canvas>
+        <div id="poissonOutput" class="mt-3 muted"></div>
+      </div>
+
+      <div class="mt-2">
+        <label class="muted small">Tipo de gráfico</label>
+        <select id="poissonChartType" class="form-select">
+          <option value="bar" selected>Barras</option>
+          <option value="line">Línea con puntos</option>
+        </select>
+      </div>   
 
     </div>
 

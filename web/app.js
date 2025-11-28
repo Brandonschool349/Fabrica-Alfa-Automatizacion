@@ -910,6 +910,63 @@ async function calcularBinomialModelos(n, p, k) {
     }
 }
 
+// ===========================
+// DISTRIBUCIÓN POISSON (barra o línea con puntos y k resaltado)
+// ===========================
+document.getElementById("btnCalcPoisson")?.addEventListener("click", ()=>{
+  const lambda = parseFloat(document.getElementById("inputPoissonLambda").value);
+  const k = parseInt(document.getElementById("inputPoissonK").value);
+  const chartType = document.getElementById("poissonChartType").value; // 🔥 tipo de gráfico
+
+  // Función factorial
+  function factorial(n){
+    if(n===0 || n===1) return 1;
+    let f = 1;
+    for(let i=2; i<=n; i++) f*=i;
+    return f;
+  }
+
+  const poissonProb = (Math.pow(lambda,k) * Math.exp(-lambda)) / factorial(k);
+  document.getElementById("poissonOutput").textContent = `P(X=${k}) = ${poissonProb.toFixed(4)}`;
+
+  // Graficar distribución (k=0..kMax)
+  const kMax = Math.max(k+5, 10);
+  const labels = [], data = [];
+  for(let i=0;i<=kMax;i++){
+    labels.push(i);
+    data.push(Math.pow(lambda,i)*Math.exp(-lambda)/factorial(i));
+  }
+
+  // Crear / actualizar gráfico
+  const ctx = document.getElementById("chartPoisson").getContext("2d");
+  if(window.poissonChart) window.poissonChart.destroy();
+
+  window.poissonChart = new Chart(ctx, {
+    type: chartType,
+    data: {
+      labels,
+      datasets: [{
+        label: "P(X=k)",
+        data,
+        // 🔥 Configuración según tipo
+        backgroundColor: chartType === 'bar'
+          ? labels.map(i => i === k ? 'red' : 'rgba(13,110,253,0.5)')
+          : 'rgba(13,110,253,0.3)',
+        borderColor: chartType === 'line' ? '#0d6efd' : undefined,
+        fill: chartType === 'line' ? false : undefined,
+        tension: chartType === 'line' ? 0.3 : undefined,
+        pointBackgroundColor: chartType === 'line'
+          ? labels.map(i => i === k ? 'red' : '#08d1f5ff')
+          : undefined,
+        pointRadius: chartType === 'line' ? 6 : undefined
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: true } }
+    }
+  });
+});
 
 /* ============================
    START
