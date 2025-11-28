@@ -227,7 +227,7 @@ git clone https://github.com/tu-repo/fabrica-alfa.git
 </pre>
 
 <h3>Abrir aplicación</h3>
-<p>Abrir <b>index.html</b> en cualquier navegador.</p>
+<p>Abrir <b>index.html</b> en cualquier navegador. en la carpeta \Code ejecutar "uvicorn api:app --reload" en la terminal e ingresar con CTRL + clic izq en el http: que aparezca</p>
 
 <h3>Ejecutar análisis en R (opcional)</h3>
 <pre>
