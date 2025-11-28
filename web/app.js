@@ -945,4 +945,28 @@ document.addEventListener("DOMContentLoaded", ()=>{
             localStorage.setItem("theme", "dark");
         }
     });
+    
+// ===========================
+// BÚSQUEDA SIDEBAR
+// ===========================
+const searchInput = document.getElementById("sidebarSearch");
+
+searchInput?.addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase();
+
+  // Obtener todas las secciones de vistas
+  const views = document.querySelectorAll(".view-pane");
+
+  views.forEach(view => {
+    const text = view.innerText.toLowerCase();
+    if (query && text.includes(query)) {
+      view.classList.remove("hidden");
+      view.classList.add("active");
+    } else {
+      view.classList.remove("active");
+      view.classList.add("hidden");
+    }
+  });
 });
+});
+

@@ -460,3 +460,52 @@ box-shadow: inset 6px 6px 12px rgba(0,0,0,0.55), 0 0 8px rgba(106,123,255,0.25);
 .anova-table tr:hover {
   background: rgba(255,255,255,0.06);
 }
+
+/* ==== SELECTS EN MODO OSCURO ==== */
+.form-select {
+    color: var(--text) !important;       /* texto claro */
+    background: rgba(10, 4, 4, 0.05) !important; /* fondo ligeramente claro */
+}
+
+.form-select option {
+    color: #fff !important;              /* opciones en blanco */
+    background: #0e1620 !important;      /* fondo oscuro del menú */
+}
+
+/* ==== SELECTS EN MODO CLARO ==== */
+:root.light-mode .form-select {
+    color: #111 !important;              /* texto negro */
+    background: #fff !important;
+}
+
+:root.light-mode .form-select option {
+    color: #111 !important;              /* texto negro */
+    background: #fff !important;
+}
+
+/* ===== MEJOR VISIBILIDAD DE ENCABEZADOS EN MODO OSCURO ===== */
+.card h4,
+.card h3,
+.card h2,
+.card h1 {
+    color: #f3f5ff !important; /* blanco más brillante */
+}
+
+/* Subtítulos y textos pequeños */
+.card .muted,
+.muted {
+    color: #c7d2e1 !important; /* gris clarito = más visible */
+}
+
+/* ===== MODO CLARO (mantiene elegancia) ===== */
+:root.light-mode .card h4,
+:root.light-mode .card h3,
+:root.light-mode .card h2,
+:root.light-mode .card h1 {
+    color: #1a1f27 !important; /* negro suave */
+}
+
+:root.light-mode .card .muted,
+:root.light-mode .muted {
+    color: #4d5566 !important; /* gris oscuro */
+}
