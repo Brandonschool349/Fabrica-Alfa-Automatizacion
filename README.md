@@ -1,176 +1,176 @@
-#Automatización y Trazabilidad de Procesos Productivos en Fábrica Alfa
+🚀 Automatización y Trazabilidad de Procesos Productivos en Fábrica Alfa
 Plataforma Web de Análisis Estadístico, Control de Producción e Inteligencia Operativa
-📌 Descripción general del proyecto
+🏭 1. Descripción General del Proyecto
 
-Este repositorio contiene el desarrollo completo de un sistema web integral diseñado para automatizar, analizar y optimizar los procesos operativos de Fábrica Alfa, una manufacturera de envases plásticos sostenibles ubicada en Apodaca, Nuevo León.
+Este repositorio contiene el desarrollo de una plataforma web integral creada para automatizar, analizar y mejorar los procesos operativos de Fábrica Alfa, una empresa manufacturera dedicada a la producción de envases plásticos sostenibles ubicada en Apodaca, Nuevo León.
 
-El sistema integra herramientas estadísticas, módulos de carga de datos, visualización interactiva, análisis avanzado y futuras funciones de control de producción y reportes en tiempo real.
+La plataforma centraliza datos, ejecuta análisis estadísticos avanzados, genera visualizaciones interactivas y sentará las bases de módulos futuros como control de producción, alertas e indicadores de desempeño.
 
-Este proyecto fue desarrollado por el equipo TECHNOIDS, siguiendo un enfoque profesional basado en análisis de negocio, metodología PROXI, arquitectura TO-BE, diseño UI/UX y programación práctica.
+🔍 2. Planteamiento del Problema
+❗ Problemáticas detectadas:
 
-🏭 1. Planteamiento del Problema
+Registros manuales en Excel → errores y retrasos.
 
-Fábrica Alfa enfrenta problemas críticos en:
+Falta de integración entre Ventas, Inventario y Producción.
 
-Variabilidad en la producción mes a mes
+Poca trazabilidad del proceso productivo.
 
-Falta de sincronización entre ventas, producción e inventario
+Variabilidad alta debido a rotación de personal.
 
-Registros manuales que generan errores y retrasos
+Ausencia de reportes estadísticos para decisiones.
 
-Incapacidad para predecir demanda y planear producción
+🎯 Consecuencias:
 
-Dependencia de reportes manuales y supervisión directa
+Sobreinventario o escasez.
 
-Falta de trazabilidad en procesos
+Tiempos de entrega inconsistentes.
 
-Esto genera:
+Costos elevados.
 
-Sobreinventario o faltantes
+Baja eficiencia operativa.
 
-Entregas tardías
+🎯 3. Objetivo del Proyecto
 
-Incremento en costos operativos
+Desarrollar un sistema web que permita:
 
-Baja eficiencia de planta
+Automatizar análisis estadísticos.
 
-Inestabilidad por rotación de personal
+Cargar y procesar bases de datos reales.
 
-🎯 2. Objetivo del Proyecto
+Visualizar métricas clave en tiempo real.
 
-Diseñar e implementar una plataforma web que permita:
+Crear futura trazabilidad completa de producción.
 
-Digitalizar los datos de producción, ventas, calidad e inventario
+Reducir errores humanos.
 
-Realizar cálculos estadísticos claves para la toma de decisiones
+Unificar Ventas, Producción e Indicadores.
 
-Automatizar análisis y generar gráficos instantáneos
-
-Construir módulos de control, alertas y reportes automáticos
-
-Integrar flujos operativos y reducir errores humanos
-
-Proveer trazabilidad y visibilidad completa del proceso productivo
-
-🧩 3. Análisis AS-IS
-
-En el estado actual, la operación se caracteriza por:
-
+🛠️ 4. Análisis AS-IS (Situación Actual)
 ❌ Procesos manuales
 
-Registro de ventas, inventario y producción en hojas de Excel
+Excel como base de operación.
 
-Supervisión humana para validar calidad
-
-Falta de monitoreo en tiempo real
+Depende de supervisión humana.
 
 ❌ Falta de integración
 
-Ventas y Producción trabajan con información desactualizada
+Áreas trabajan con información distinta.
 
-Inventarios se desbalancean constantemente
+No hay flujo informativo unificado.
 
-❌ Variabilidad alta
+❌ Variabilidad y errores
 
-Influencia de rotación de personal y falta de estandarización.
+Operadores no estandarizados.
 
-🌟 4. Modelo TO-BE (Solución Propuesta)
+Datos inconsistentes.
 
-La solución diseñada es un sistema digital integrado con:
+🌟 5. Modelo TO-BE (Solución Propuesta)
+✔ Digitalización completa
+✔ Dashboard estadístico
+✔ Cálculos automáticos y análisis avanzados
+✔ Módulos integrados
+✔ Alertas y reportes automatizados
+✔ Base para trazabilidad en tiempo real
+📌 Módulos planeados (completos y futuros)
+Completos
 
-✔ Panel estadístico avanzado
+Login
 
-Medidas de tendencia central
+Carga de archivos
 
-Medidas de dispersión
+Estadísticas
 
-Pruebas de probabilidad y tests
+Pruebas de probabilidad
 
-Modelos estadísticos
+Distribuciones (Binomial y Poisson)
 
-Distribución Binomial y Poisson
+Barra de búsqueda
 
-ANOVA y correlaciones
-
-✔ Control de producción (pendiente de implementar)
-
-Registro de operarios
-
-Producción por turno
-
-Revisión de calidad
-
-Incidencias
-
-✔ Alertas y reportes
-
-Umbrales mínimos/máximos
-
-Alertas de inventario
-
-Reportes semanales/mensuales
-
-✔ Trazabilidad inteligente (propuesta de innovación)
-
-Integración futura con RFID/NFC.
-
-🖥️ 5. Página Web — Descripción funcional
-
-La plataforma web fue creada para centralizar operaciones y estadísticas en un sistema accesible, ordenado y profesional.
-
-🔐 Login
-
-Autenticación de usuarios del sistema.
-
-📁 Subida de archivos
-
-Carga de bases de datos (Excel/CSV) para análisis.
-
-📊 Dashboard estadístico
-
-Cálculos automáticos:
-
-Media, mediana, moda
-
-Rango, varianza, desviación estándar
-
-Tests de probabilidad
-
-Modelos estadísticos
-
-Distribuciones estadísticas
-
-🔍 Barra de búsqueda
-
-Encuentra clientes o pedidos instantáneamente.
-
-🌙 Modo día/noche
-
-Mejora de experiencia de usuario.
-
-📈 ANOVA y gráficas
-
-Generación de:
+Modo día/noche
 
 ANOVA
 
-Boxplots
+Gráficas interactivas
 
-Linecharts
+Pendientes (TO-BE próximo)
 
-Histogramas
-
-🏭 Módulos futuros por integrar
-
-Registro de operario
+Registro de operarios
 
 Control de producción
 
-Módulo de reportes
+Módulo de reportes PDF
 
-Alertas y reportes
+Alertas automáticas
 
-🏗️ 6. Arquitectura del Sistema
+Cuadros de mando ejecutivos
+
+🖥️ 6. Características de la Página Web
+🔐 Login
+
+Acceso seguro al panel principal.
+
+📁 Carga de archivos
+
+Soporta Excel y CSV para análisis posterior.
+
+📊 Dashboard Estadístico
+
+Incluye:
+
+Medias
+
+Mediana
+
+Moda
+
+Varianza
+
+Desviación estándar
+
+Rango
+
+Cálculos automáticos
+
+🧪 Probabilidades y Tests
+
+Implementación de:
+
+Tests con p-valor
+
+Interpretación automática
+
+🎲 Distribuciones
+
+Binomial
+
+Poisson
+Con gráficos explicativos.
+
+📈 Modelos Estadísticos
+
+ANOVA
+Modelos descriptivos
+Gráficas en ggplot2
+
+🔍 Barra de búsqueda
+
+Filtrado rápido por cliente o pedido.
+
+🌙 Modo día/noche
+
+Mejor experiencia de usuario.
+
+📦 Módulos futuros
+
+Registro de operarios
+
+Control de producción
+
+Alertas
+
+Reportes ejecutivos
+
+🧩 7. Arquitectura del Sistema
 Frontend
 
 HTML5
@@ -179,85 +179,99 @@ CSS3
 
 JavaScript
 
-Modo oscuro / claro
+Diseño responsivo
 
-UI responsiva
+UX con modo oscuro
 
 Backend
 
-Python / R (para cálculos estadísticos)
+Python (procesos y API básica)
 
-API REST básica (Python)
+R (cálculos estadísticos)
 
-Herramientas estadísticas
+Librerías de análisis
 
-R: Tendencia central, dispersión, ANOVA, Poisson, Binomial
+ggplot2
 
-ggplot2 para gráficas
+dplyr
 
-dplyr para manejo de datos
+stats
 
-Base de datos
+tibble
 
-Dataset de 24 meses generado a partir de Kaggle y datos hipotéticos profesionales.
+Datos
 
-📦 7. Módulos del Sistema
-Módulo	Estado	Descripción
-Login	✔ Completo	Acceso seguro al sistema
-Subida de archivos	✔ Completo	Importación de datos
-Estadísticas	✔ Completo	Cálculos y gráficos
-Probabilidades y Tests	✔ Completo	Tests con p-valor
-Binomial	✔ Completo	Gráficos + interpretación
-Poisson	✔ Completo	Gráficos + análisis
-Barra de búsqueda	✔ Completo	Filtro instantáneo
-Modo noche	✔ Completo	UX mejorada
-Registro de operario	⏳ Pendiente	Formulario + BD
-Control de producción	⏳ Pendiente	Registro en planta
-Reportes	⏳ Pendiente	PDF/Excel automático
-Alertas	⏳ Pendiente	Inventario y producción
-📈 8. Análisis Estadísticos Realizados
+Dataset desarrollado a partir de fuentes reales de ventas, producción e inventario.
+
+🧪 8. Análisis Estadísticos Realizados
 
 Incluye:
 
-Medidas de tendencia central
+Tendencia central (media, mediana, moda)
 
-Medidas de dispersión
+Dispersión (varianza, desviación estándar, rango)
 
-Correlación ventas–producción
-
-Probabilidades básicas
+Probabilidades
 
 Tests estadísticos
 
-Modelos de predicción
+Distribución Poisson
 
-Distribuciones discretas
+Distribución Binomial
 
 ANOVA
 
-Todos calculados en R con datasets reales del caso.
+Comparaciones por grupos
 
-📚 9. Glosario
+Gráficas estilizadas con ggplot2
+
+📦 9. Módulos del Sistema
+Módulo	Estado	Descripción
+Login	✔ Completo	Autenticación
+Subida de archivos	✔ Completo	Importación de datos
+Estadísticas	✔ Completo	Análisis automático
+Probabilidades y Tests	✔ Completo	p-valores
+Distribución Binomial	✔ Completo	Cálculo + gráfica
+Distribución Poisson	✔ Completo	Cálculo + gráfica
+ANOVA	✔ Completo	Comparaciones
+Modo oscuro	✔ Completo	UX mejorada
+Registro de operario	⏳ Pendiente	TO-BE
+Control de producción	⏳ Pendiente	TO-BE
+Alertas y reportes	⏳ Pendiente	TO-BE
+Reportes ejecutivos	⏳ Pendiente	TO-BE
+🗂️ 10. Pruebas del Cliente
+
+Incluye pruebas de:
+
+Login
+
+Subida de archivos
+
+Estadísticas
+
+Búsqueda
+
+ANOVA
+
+Binomial
+
+Poisson
+
+Modo noche
+
+Pendiente agregar: Registro de operario, Control de producción, Alertas, Reportes.
+
+📚 11. Glosario
 
 AS-IS: Estado actual del proceso
-
-TO-BE: Proceso futuro optimizado
-
-Tendencia central: Media, mediana, moda
-
-Dispersión: Varianza, desviación estándar, rango
-
-ANOVA: Comparación de medias entre grupos
-
-Poisson/Binomial: Modelos probabilísticos
-
-ROI: Retorno de inversión
-
+TO-BE: Estado mejorado propuesto
+Desviación estándar: Medida de dispersión
+ANOVA: Análisis de varianza entre grupos
+Poisson / Binomial: Distribuciones para conteos
 Inventario mínimo: Umbral de seguridad
+p-valor: Evidencia contra la hipótesis nula
 
-📖 10. Bibliografía
-
-Formato APA 7 (versión reducida):
+📖 12. Bibliografía (APA)
 
 Illowsky, B., & Dean, S. (2022). Introducción a la estadística. OpenStax.
 
@@ -269,66 +283,30 @@ OpenStax. (s.f.). Niveles de medición.
 
 RAE. (s.f.). Diccionario de la lengua española.
 
-👥 11. Autores del proyecto
-Equipo TECHNOIDS (2025)
+👥 13. Equipo de Desarrollo — TECHNOIDS
 
-Brandon Alejandro Pedraza Valdez — Líder / Gestión
+Brandon Alejandro Pedraza Valdez — Líder, gestión, frontend
 
 Juan Pablo Arce Jáuregui — Programador
 
 Emilio Zúñiga de la Garza — Análisis
 
-Ricardo Daniel Ramírez Ortíz — Diseño
+Ricardo Daniel Ramírez Ortíz — UI/UX
 
-David Alejandro González Chávez — Desarrollo
+David Alejandro González Chávez — Backend
 
-🧪 12. Pruebas del Cliente
-
-Incluye:
-
-Login
-
-Subida de archivos
-
-Búsqueda
-
-Estadísticas varias
-
-Binomial & Poisson
-
-Modo día-noche
-
-ANOVA
-
-Pruebas pendientes
-
-(Tabla completa incluida en el PDF original y en /docs del repositorio)
-
-🚀 13. Conclusión del Proyecto
-
-El sistema desarrollado:
-
-Aporta valor real al proceso productivo
-
-Moderniza la toma de decisiones
-
-Reduce errores humanos
-
-Permite análisis estadístico instantáneo
-
-Prepara la base para una digitalización completa (TO-BE)
-
-Es escalable a control de producción en tiempo real
-
-Marca un antes y un después en la eficiencia de Fábrica Alfa.
-
-🏁 14. Instrucciones de ejecución
+🏁 14. Cómo ejecutar
 git clone https://github.com/tu-repo/fabrica-alfa.git
 cd fabrica-alfa
-# Abrir index.html en navegador
 
 
-Para cálculos en R:
+Abrir el archivo index.html en el navegador.
+
+Ejecutar los scripts en R (opcional):
+
+install.packages("ggplot2")
+install.packages("dplyr")
+source("scripts/analisis.R")
 
 install.packages("ggplot2")
 install.packages("dplyr")
