@@ -333,11 +333,3 @@ Para cálculos en R:
 install.packages("ggplot2")
 install.packages("dplyr")
 source("scripts/analisis_estadistico.R")
-
-🔥 Si quieres, te genero:
-
-✅ Una versión en inglés
-✅ Una versión más corta
-✅ README con imágenes incrustadas
-✅ README con badges profesionales (Python, R, HTML, CSS)
-✅ README dividido en carpetas para GitHub Pages
