@@ -433,3 +433,30 @@ box-shadow: inset 6px 6px 12px rgba(0,0,0,0.55), 0 0 8px rgba(106,123,255,0.25);
   --shadow-soft: -10px -10px 24px rgba(255,255,255,0.7);
   --inset: inset 4px 4px 8px rgba(0,0,0,0.12);
 }
+
+.anova-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.anova-table th {
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  padding: 10px;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.anova-table td {
+  padding: 8px 10px;
+  color: var(--muted);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.anova-table tr:hover {
+  background: rgba(255,255,255,0.06);
+}

@@ -15,6 +15,9 @@ let STATE = {
   arrays: {},          // numeric arrays fetched via /dataarray/{col}
   charts: { bin: null, scatter: null, hist: null },
 };
+// === GRÁFICAS BINOMIALES (Estadísticas / Modelos) ===
+let chartBinomialStats = null;     
+let chartBinomialModels = null;
 
 /* ============================
    DOM helpers
@@ -102,12 +105,30 @@ function initUI(){
   });
 
   // binomial
-  $("#btnBinom")?.addEventListener("click", async ()=>{
-    const n = parseInt($("#binN").value);
-    const p = parseFloat($("#binP").value);
-    if(isNaN(n) || isNaN(p)) { toast("Introduce n y p válidos", "error"); return; }
-    await fetchBinomial(n,p);
-  });
+  document.getElementById("btnBinom")?.addEventListener("click", () => {
+    const n = parseInt(document.getElementById("binN").value);
+    const p = parseFloat(document.getElementById("binP").value);
+
+    calcularBinomialUniversal(
+        n, p,
+        "chartBinomialStats",     // canvas de ESTADÍSTICAS
+        "probOutputsStats"        // div donde poner texto
+    );
+});
+
+// Listener para la sección DISTRIBUCIÓN BINOMIAL (Modelos Prob.)
+document.getElementById("btnCalcBinomial")?.addEventListener("click", () => {
+    const n = parseInt(document.getElementById("inputBinN").value);
+    const p = parseFloat(document.getElementById("inputBinP").value);
+    const k = parseInt(document.getElementById("inputBinK").value);
+
+    // Llama a tu función universal
+    calcularBinomialUniversal(
+        n, p,
+        "chartBinomialModels",   // canvas correcto
+        "binomialModelsOutput"   // div donde quieres poner resultados (ponlo tú)
+    );
+});
 
  // ============================
 // MODELOS — EVENT LISTENERS
@@ -209,13 +230,13 @@ function loginFromModal(){
 
   // validar credenciales
   if((u === "admin" && p === "fabrica2025") || (u === "gerente" && p === "fabrica2025")){
-    STATE.user = u; 
+    STATE.user = u;
     STATE.role = "Gerente";
   } else if(u === "supervisor" && p === "control123"){
-    STATE.user = u; 
+    STATE.user = u;
     STATE.role = "Supervisor";
   } else if(u === "operario" && p === "op123"){
-    STATE.user = u; 
+    STATE.user = u;
     STATE.role = "Operario";
   } else {
     $("#loginMsg").innerText = "Credenciales incorrectas";
@@ -306,10 +327,18 @@ async function uploadFile(){
       STATE.raw = j;
 
       // guardar dataset crudo del servidor
-      window.dataset = j.data || [];
+      // ---------- FIX: aceptar j.data o j.muestra ----------
+      window.dataset = j.data || j.muestra || [];
 
-      // convertir columna Mes (si existe)
+      // si backend devolvió muestra, renderizar tabla preview
+      if (j.muestra && j.muestra.length) {
+        try { renderSampleTable(j.muestra); } catch(e) { console.warn("renderSampleTable fallo:", e); }
+      }
+
+      // convertir columna Mes (si existe) sobre window.dataset
       window.dataset = window.dataset.map(r => {
+        // some rows may be null/undefined or not have "Mes"
+        if (!r) return r;
         if (r["Mes"]) {
           const fecha = new Date(r["Mes"]);
           if (!isNaN(fecha)) {
@@ -323,6 +352,9 @@ async function uploadFile(){
       $("#uploadMsg").innerText = `${j.mensaje} — columnas: ${j.columnas.join(", ")}`;
       toast("Archivo cargado", "success");
 
+      window.columnTypes = j.columnTypes;
+      console.log("Tipos recibidos:", window.columnTypes);
+      populateModelSelects(j.columnas, j.columnTypes);
       populateColumnSelectors(j.columnas);
 
       await tryFetchArrays();
@@ -365,20 +397,22 @@ function populateColumnSelectors(cols){
     "#selectDisp",
     "#selectQuick",
 
-    // 🔥 Agregamos los nuevos selects:
-    "#selectModelVar",   // Variables disponibles (modelos)
-    "#selectModelX",     // Variable X (regresión/correlación)
-    "#selectModelY",     // Variable Y (regresión/correlación)
+    // Selects nuevos
+    "#selectModelVar",
+    "#selectModelGroup",
+    "#selectModelX",
+    "#selectModelY",
 
-    "#selectBinomCol",   // si tienes binomial por columna
-    "#selectProdCol"     // si tienes control de producción
+    "#selectBinomCol",
+    "#selectProdCol"
   ];
 
+  // Llenar todos esos selects con todas las columnas
   targets.forEach(sel => {
     const el = document.querySelector(sel);
-    if(!el) return;          // Si no existe, lo ignoramos sin error
+    if (!el) return;  // Si no existe, lo ignoramos sin error
     el.innerHTML = '<option value="">-- seleccionar --</option>';
-    cols.forEach(c=>{
+    cols.forEach(c => {
       const o = document.createElement("option");
       o.value = c;
       o.innerText = c;
@@ -386,6 +420,7 @@ function populateColumnSelectors(cols){
     });
   });
 }
+
 
 /* ============================
    Arrays fetch (for charts)
@@ -455,48 +490,74 @@ async function calcDispColumn(col){
    ANOVA usando selects
    ============================ */
 async function postANOVA() {
-    const data = window.dataset; // tus datos cargados desde Excel
+    const data = window.dataset; // datos cargados desde Excel
+    console.log("Datos para ANOVA:", data);
 
-    if (!data || data.length === 0) {
+    if (!data || !data.length) {
         toast("No hay datos cargados", "error");
         return;
     }
 
-    const varName = document.getElementById("selectModelVar").value;
-    const group = document.getElementById("selectModelX").value; // X como grupo
+    const variable = document.getElementById("selectModelVar").value;
+    const group = document.getElementById("selectModelGroup").value;
 
-    if (!varName || !group) {
+    console.log("ANOVA con var:", variable, "grupo:", group);
+
+    if (!variable || !group) {
         toast("Selecciona ambas variables", "error");
         return;
     }
 
     try {
-        const resultsDiv = document.getElementById("modelResults");
-        resultsDiv.innerHTML = ""; // limpiar resultados anteriores
-
-        // enviamos los datos junto con los nombres de columna
         const r = await fetch(`${API_BASE}/anova`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ var: varName, group_var: group, data: data })
+            body: JSON.stringify({
+                data: [
+                    Object.keys(data[0]), // encabezados
+                    ...data.map(row => Object.values(row))
+                ],
+                var: variable,
+                group_var: group
+            })
         });
 
         const j = await r.json();
 
+        const resultsDiv = document.getElementById("modelResults");
+        resultsDiv.innerHTML = "";
+
         if (j.error) {
-            toast(j.error || "Error en ANOVA", "error");
+            toast(j.error, "error");
             return;
         }
 
-        // mostrar resultados (imagen o tabla/JSON)
-        if (j.image) {
-            const img = document.createElement("img");
-            img.src = j.image;
-            resultsDiv.appendChild(img);
-        } else {
-            resultsDiv.innerHTML = `<pre style="white-space:pre-wrap; color:var(--muted)">${JSON.stringify(j, null, 2)}</pre>`;
-        }
+       // Crear tabla ANOVA
+let tabla = `
+<table class="anova-table">
+    <tr>
+        <th>Fuente</th>
+        <th>Suma de Cuadrados</th>
+        <th>df</th>
+        <th>F</th>
+        <th>p-valor</th>
+    </tr>
+`;
 
+j.forEach(row => {
+    tabla += `
+    <tr>
+        <td>${row.index}</td>
+        <td>${row.sum_sq !== null ? row.sum_sq.toFixed(2) : ""}</td>
+        <td>${row.df}</td>
+        <td>${row.F !== null ? row.F.toFixed(4) : ""}</td>
+        <td>${row["PR(>F)"] !== null ? row["PR(>F)"].toFixed(4) : ""}</td>
+    </tr>`;
+});
+
+tabla += `</table>`;
+
+resultsDiv.innerHTML = tabla;
         toast("ANOVA ejecutado", "success");
 
     } catch (e) {
@@ -504,6 +565,7 @@ async function postANOVA() {
         toast("Error al ejecutar ANOVA", "error");
     }
 }
+
 /* ============================
    Correlación usando selects
    ============================ */
@@ -534,12 +596,12 @@ async function fetchCorrelationUI(){
 async function fetchRegressionUI(){
     const x = document.getElementById("selectModelX").value;
     const y = document.getElementById("selectModelY").value;
-
+    
     if(!x || !y){
-        toast("Selecciona variables X e Y", "error");
-        return;
+      toast("Selecciona variables X e Y", "error");
+      return;
     }
-
+    
     try {
         const r = await fetch(`${API_BASE}/regresion?x=${encodeURIComponent(x)}&y=${encodeURIComponent(y)}`);
         const j = await r.json();
@@ -594,16 +656,6 @@ function destroyChart(key){
     STATE.charts[key].destroy();
     STATE.charts[key] = null;
   }
-}
-
-function renderBinomial(labels, pmf){
-  const ctx = document.getElementById("chartBinomial").getContext("2d");
-  destroyChart("bin");
-  STATE.charts.bin = new Chart(ctx, {
-    type: "bar",
-    data: { labels: labels, datasets: [{ label: "P(X=k)", data: pmf }]},
-    options: { plugins:{ legend:{ display:false } }, responsive:true }
-  });
 }
 
 function renderScatter(xs, ys){
@@ -673,6 +725,191 @@ function showMsg(text, type="info") {
     box.innerText = text;
     box.style.display = "block";
 }
+
+function populateModelSelects(cols, types) {
+    const numeric = cols.filter(c => types[c] === "number");
+    const categorical = cols.filter(c => types[c] === "string");
+
+    // ANOVA: solo categorías
+    const groupSelect = document.querySelector("#selectModelGroup"); 
+    if (groupSelect) {
+        groupSelect.innerHTML = '<option value="">-- seleccionar --</option>';
+        categorical.forEach(c => {
+            const o = document.createElement("option");
+            o.value = c;
+            o.innerText = c;
+            groupSelect.appendChild(o);
+        });
+    }
+
+    const groupSelect2 = document.querySelector("#selectModelVar"); 
+    if (groupSelect2) {
+        groupSelect2.innerHTML = '<option value="">-- seleccionar --</option>';
+        categorical.forEach(c => {
+            const o = document.createElement("option");
+            o.value = c;
+            o.innerText = c;
+            groupSelect2.appendChild(o);
+        });
+    }
+
+    // Variables numéricas (Regresión / Correlación)
+    const numTargets = ["#selectModelVar", "#selectModelY"];
+    numTargets.forEach(sel => {
+        const el = document.querySelector(sel);
+        if (!el) return;
+        el.innerHTML = '<option value="">-- seleccionar --</option>';
+        numeric.forEach(c => {
+            const o = document.createElement("option");
+            o.value = c;
+            o.innerText = c;
+            el.appendChild(o);
+        });
+    });
+
+    // X de regresión/correlación (numéricas también)
+    const xSel = document.querySelector("#selectModelX");
+    if (xSel) {
+        xSel.innerHTML = '<option value="">-- seleccionar --</option>';
+        numeric.forEach(c => {
+            const o = document.createElement("option");
+            o.value = c;
+            o.innerText = c;
+            xSel.appendChild(o);
+        });
+    }
+}
+
+// ===========================
+// BINOMIAL UNIVERSAL
+// ===========================
+async function calcularBinomialUniversal(n, p, canvasID, outputDivID) {
+    try {
+        const r = await fetch(`${API_BASE}/binomial?n=${n}&p=${p}`);
+        if (!r.ok) { 
+            toast("Error en API Binomial", "error"); 
+            return; 
+        }
+
+        const j = await r.json();
+
+        const canvas = document.getElementById(canvasID);
+        const ctx = canvas.getContext("2d");
+
+        // =====================================
+        // 🔥 DESTRUIR GRÁFICA PREVIA
+        // =====================================
+        if (canvasID === "chartBinomialStats") {
+            if (chartBinomialStats) chartBinomialStats.destroy();
+        }
+        if (canvasID === "chartBinomialModels") {
+            if (chartBinomialModels) chartBinomialModels.destroy();
+        }
+
+        // =====================================
+        // 🔥 CREAR NUEVA GRÁFICA
+        // =====================================
+        const newChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: j.k,
+                datasets: [{
+                label: "P(X=k)",
+                data: j.pmf,
+                backgroundColor: j.k.map((value, idx) =>
+                    idx === Number(document.getElementById("inputBinK").value)
+                        ? "red" // 🔥 barra resaltada cuando es k
+                        : "rgba(54, 162, 235, 0.5)" // barras normales
+                )
+            }]
+            },
+            options: {
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Guardar referencia según sección
+        if (canvasID === "chartBinomialStats") {
+            chartBinomialStats = newChart;
+        } else if (canvasID === "chartBinomialModels") {
+            chartBinomialModels = newChart;
+        }
+
+        // =====================================
+        // TEXTO / RESULTADOS
+        // =====================================
+        document.getElementById(outputDivID).innerHTML = `
+            <span class="muted">
+                Media = ${j.media.toFixed(3)} —
+                Varianza = ${j.varianza.toFixed(3)}
+            </span>
+        `;
+
+        toast("Binomial calculada", "success");
+
+    } catch (e) {
+        console.error(e);
+        toast("Error al calcular binomial", "error");
+    }
+}
+
+// ===========================
+// BINOMIAL (Modelos)
+// ===========================
+async function calcularBinomialModelos(n, p, k) {
+    try {
+        const r = await fetch(`${API_BASE}/binomial?n=${n}&p=${p}`);
+        const j = await r.json();
+
+        if (j.error) {
+            toast(j.error, "error");
+            return;
+        }
+
+        // canvas específico del módulo Modelos
+        const canvas = document.getElementById("chartBinomialModels");
+        const ctx = canvas.getContext("2d");
+
+        // destruir si ya existe
+        if (STATE.charts.binModels) {
+            STATE.charts.binModels.destroy();
+        }
+
+        // gráfica
+        STATE.charts.binModels = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: j.k,
+                datasets: [{
+                    label: "P(X = k)",
+                    data: j.pmf
+                }]
+            },
+            options: { plugins: { legend: { display: false } } }
+        });
+
+        // cálculo puntual si el usuario metió k
+        let resultado = "";
+        if (!isNaN(k) && k >= 0 && k <= n) {
+            resultado = `P(X=${k}) = ${j.pmf[k].toFixed(5)}`;
+        }
+
+        document.getElementById("modelResults").innerHTML = `
+            <div class="muted">
+                Media = ${j.media.toFixed(3)} —
+                Varianza = ${j.varianza.toFixed(3)}<br>
+                ${resultado}
+            </div>
+        `;
+
+        toast("Binomial calculada", "success");
+
+    } catch (e) {
+        console.error(e);
+        toast("Error al calcular binomial (Modelos)", "error");
+    }
+}
+
 
 /* ============================
    START
