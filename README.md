@@ -2,246 +2,130 @@
 Plataforma Web de Análisis Estadístico, Control de Producción e Inteligencia Operativa
 🏭 1. Descripción General del Proyecto
 
-Este repositorio contiene el desarrollo de una plataforma web integral creada para automatizar, analizar y mejorar los procesos operativos de Fábrica Alfa, una empresa manufacturera dedicada a la producción de envases plásticos sostenibles ubicada en Apodaca, Nuevo León.
-
-La plataforma centraliza datos, ejecuta análisis estadísticos avanzados, genera visualizaciones interactivas y sentará las bases de módulos futuros como control de producción, alertas e indicadores de desempeño.
+Este repositorio contiene el desarrollo de una plataforma web integral diseñada para automatizar…
 
 🔍 2. Planteamiento del Problema
-❗ Problemáticas detectadas:
+Problemas principales
 
-Registros manuales en Excel → errores y retrasos.
+Registros manuales
 
-Falta de integración entre Ventas, Inventario y Producción.
+Falta de integración
 
-Poca trazabilidad del proceso productivo.
+Variabilidad por rotación
 
-Variabilidad alta debido a rotación de personal.
+Errores frecuentes
 
-Ausencia de reportes estadísticos para decisiones.
+Consecuencias
 
-🎯 Consecuencias:
+Costos altos
 
-Sobreinventario o escasez.
+Baja eficiencia
 
-Tiempos de entrega inconsistentes.
-
-Costos elevados.
-
-Baja eficiencia operativa.
+Retrasos
 
 🎯 3. Objetivo del Proyecto
 
-Desarrollar un sistema web que permita:
+Desarrollar un sistema web que permita automatizar análisis…
 
-Automatizar análisis estadísticos.
+🛠️ 4. Análisis AS-IS
 
-Cargar y procesar bases de datos reales.
+Procesos manuales
 
-Visualizar métricas clave en tiempo real.
+Datos inconsistentes
 
-Crear futura trazabilidad completa de producción.
+Falta de digitalización
 
-Reducir errores humanos.
+🌟 5. Modelo TO-BE
 
-Unificar Ventas, Producción e Indicadores.
+Procesos automatizados
 
-🛠️ 4. Análisis AS-IS (Situación Actual)
-❌ Procesos manuales
+Dashboard central
 
-Excel como base de operación.
+Estadística integrada
 
-Depende de supervisión humana.
-
-❌ Falta de integración
-
-Áreas trabajan con información distinta.
-
-No hay flujo informativo unificado.
-
-❌ Variabilidad y errores
-
-Operadores no estandarizados.
-
-Datos inconsistentes.
-
-🌟 5. Modelo TO-BE (Solución Propuesta)
-✔ Digitalización completa
-✔ Dashboard estadístico
-✔ Cálculos automáticos y análisis avanzados
-✔ Módulos integrados
-✔ Alertas y reportes automatizados
-✔ Base para trazabilidad en tiempo real
-📌 Módulos planeados (completos y futuros)
-Completos
-
-Login
-
-Carga de archivos
-
-Estadísticas
-
-Pruebas de probabilidad
-
-Distribuciones (Binomial y Poisson)
-
-Barra de búsqueda
-
-Modo día/noche
-
-ANOVA
-
-Gráficas interactivas
-
-Pendientes (TO-BE próximo)
-
-Registro de operarios
-
-Control de producción
-
-Módulo de reportes PDF
-
-Alertas automáticas
-
-Cuadros de mando ejecutivos
+Control de producción (futuro)
 
 🖥️ 6. Características de la Página Web
 🔐 Login
 
-Acceso seguro al panel principal.
+Acceso seguro.
 
 📁 Carga de archivos
 
-Soporta Excel y CSV para análisis posterior.
+Excel y CSV.
 
-📊 Dashboard Estadístico
+📊 Dashboard estadístico
 
-Incluye:
-
-Medias
-
-Mediana
-
-Moda
-
-Varianza
-
-Desviación estándar
-
-Rango
-
-Cálculos automáticos
-
-🧪 Probabilidades y Tests
-
-Implementación de:
-
-Tests con p-valor
-
-Interpretación automática
-
-🎲 Distribuciones
-
-Binomial
-
-Poisson
-Con gráficos explicativos.
-
-📈 Modelos Estadísticos
-
-ANOVA
-Modelos descriptivos
-Gráficas en ggplot2
+Media, mediana, moda…
 
 🔍 Barra de búsqueda
 
-Filtrado rápido por cliente o pedido.
+Filtros instantáneos.
 
 🌙 Modo día/noche
 
-Mejor experiencia de usuario.
+Mejor UX.
 
-📦 Módulos futuros
+🎲 Distribuciones
 
-Registro de operarios
+Poisson & Binomial.
 
-Control de producción
+🧪 ANOVA
 
-Alertas
+Comparación entre grupos.
 
-Reportes ejecutivos
+🏭 Módulos futuros
+
+Registro de operario, control de producción…
 
 🧩 7. Arquitectura del Sistema
 Frontend
 
-HTML5
+HTML
 
-CSS3
+CSS
 
 JavaScript
 
-Diseño responsivo
-
-UX con modo oscuro
-
 Backend
 
-Python (procesos y API básica)
+Python (API)
 
-R (cálculos estadísticos)
+R (estadística)
 
-Librerías de análisis
+Librerías
 
 ggplot2
 
 dplyr
 
-stats
-
-tibble
-
-Datos
-
-Dataset desarrollado a partir de fuentes reales de ventas, producción e inventario.
-
 🧪 8. Análisis Estadísticos Realizados
 
-Incluye:
+Tendencia central
 
-Tendencia central (media, mediana, moda)
+Dispersión
 
-Dispersión (varianza, desviación estándar, rango)
+Probabilidad
 
-Probabilidades
+Poisson
 
-Tests estadísticos
-
-Distribución Poisson
-
-Distribución Binomial
+Binomial
 
 ANOVA
 
-Comparaciones por grupos
-
-Gráficas estilizadas con ggplot2
-
 📦 9. Módulos del Sistema
-Módulo	Estado	Descripción
-Login	✔ Completo	Autenticación
-Subida de archivos	✔ Completo	Importación de datos
-Estadísticas	✔ Completo	Análisis automático
-Probabilidades y Tests	✔ Completo	p-valores
-Distribución Binomial	✔ Completo	Cálculo + gráfica
-Distribución Poisson	✔ Completo	Cálculo + gráfica
-ANOVA	✔ Completo	Comparaciones
-Modo oscuro	✔ Completo	UX mejorada
-Registro de operario	⏳ Pendiente	TO-BE
-Control de producción	⏳ Pendiente	TO-BE
-Alertas y reportes	⏳ Pendiente	TO-BE
-Reportes ejecutivos	⏳ Pendiente	TO-BE
+Módulo	Estado
+Login	✔
+Subida de archivos	✔
+Estadísticas	✔
+Probabilidades	✔
+Binomial	✔
+Poisson	✔
+ANOVA	✔
+Registro de operario	⏳
+Control de producción	⏳
+Alertas	⏳
 🗂️ 10. Pruebas del Cliente
-
-Incluye pruebas de:
 
 Login
 
@@ -249,48 +133,46 @@ Subida de archivos
 
 Estadísticas
 
-Búsqueda
+Distribuciones
 
 ANOVA
 
-Binomial
+Modo oscuro
 
-Poisson
-
-Modo noche
-
-Pendiente agregar: Registro de operario, Control de producción, Alertas, Reportes.
+Pendientes: Registro de operario, Control, Alertas
 
 📚 11. Glosario
 
-AS-IS: Estado actual del proceso
-TO-BE: Estado mejorado propuesto
-Desviación estándar: Medida de dispersión
-ANOVA: Análisis de varianza entre grupos
-Poisson / Binomial: Distribuciones para conteos
-Inventario mínimo: Umbral de seguridad
-p-valor: Evidencia contra la hipótesis nula
+AS-IS: Estado actual
+
+TO-BE: Propuesta futura
+
+ANOVA: Comparación de medias
+
+p-valor: Evidencia estadística
 
 📖 12. Bibliografía (APA)
 
-Illowsky, B., & Dean, S. (2022). Introducción a la estadística. OpenStax.
+Illowsky & Dean, Introducción a la estadística
 
-Demoss, M. (2022). Estadística descriptiva.
+Demoss, Estadística descriptiva
 
-Kaggle. (s.f.). Datasets para machine learning.
+Kaggle datasets
 
-OpenStax. (s.f.). Niveles de medición.
+👥 13. Equipo TECHNOIDS
 
-RAE. (s.f.). Diccionario de la lengua española.
+Brandon A. Pedraza — Líder
 
-👥 13. Equipo de Desarrollo — TECHNOIDS
+Juan Pablo — Programador
 
-Brandon Alejandro Pedraza Valdez — Líder, gestión, frontend
+Emilio — Análisis
 
-Juan Pablo Arce Jáuregui — Programador
+Ricardo — UI/UX
 
-Emilio Zúñiga de la Garza — Análisis
+David — Backend
 
-Ricardo Daniel Ramírez Ortíz — UI/UX
+🏁 14. Cómo ejecutar
+git clone <tu repo>
 
-David Alejandro González Chávez — Backend
+
+Abrir index.html en navegador.
