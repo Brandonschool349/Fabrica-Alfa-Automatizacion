@@ -294,20 +294,3 @@ Emilio Zúñiga de la Garza — Análisis
 Ricardo Daniel Ramírez Ortíz — UI/UX
 
 David Alejandro González Chávez — Backend
-
-🏁 14. Cómo ejecutar
-git clone https://github.com/tu-repo/fabrica-alfa.git
-cd fabrica-alfa
-
-
-Abrir el archivo index.html en el navegador.
-
-Ejecutar los scripts en R (opcional):
-
-install.packages("ggplot2")
-install.packages("dplyr")
-source("scripts/analisis.R")
-
-install.packages("ggplot2")
-install.packages("dplyr")
-source("scripts/analisis_estadistico.R")
