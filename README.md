@@ -1,4 +1,4 @@
-Automatización y Trazabilidad de Procesos Productivos en Fábrica Alfa
+#Automatización y Trazabilidad de Procesos Productivos en Fábrica Alfa
 Plataforma Web de Análisis Estadístico, Control de Producción e Inteligencia Operativa
 📌 Descripción general del proyecto
 
