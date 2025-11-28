@@ -1,4 +1,4 @@
-<h1 align="center">🚀 Automatización y Trazabilidad de Procesos Productivos en Fábrica Alfa</h1>
+<h1 align="center"> Automatización y Trazabilidad de Procesos Productivos en Fábrica Alfa</h1>
 <h3 align="center"><i>Plataforma Web de Análisis Estadístico, Control de Producción e Inteligencia Operativa</i></h3>
 
 <hr/>
