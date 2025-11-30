@@ -929,6 +929,120 @@ document.getElementById("btnCalcPoisson")?.addEventListener("click", ()=>{
   });
 });
 
+/* Normal (grafica estilizada igual que Poisson) */
+async function postNormal() {
+    const mu = parseFloat(document.getElementById("normalMu").value);
+    const sigma = parseFloat(document.getElementById("normalSigma").value);
+    const a = parseFloat(document.getElementById("normalA").value);
+    const b = parseFloat(document.getElementById("normalB").value);
+
+    if (isNaN(mu) || isNaN(sigma) || isNaN(a) || isNaN(b)) {
+        toast("Completa todos los campos", "error");
+        return;
+    }
+
+    try {
+        // opcional: si tienes endpoint /normal lo usas, si no comentarlo
+        // const r = await fetch(`${API_BASE}/normal`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mu, sigma, a, b }) });
+        // const j = await r.json();
+        // if (j.error) { toast(j.error, "error"); return; }
+        // document.getElementById("normalResults").innerHTML = `<p><strong>Probabilidad:</strong> ${j.prob.toFixed(6)}</p>`;
+
+        // si no usas API, puedes calcular prob aquí o mostrar resultado mínimo:
+        document.getElementById("normalResults").innerHTML = `<p><strong>Intervalo:</strong> [${a}, ${b}] — μ=${mu}, σ=${sigma}</p>`;
+
+        const chartType = document.getElementById("normalChartType").value || "line";
+        const canvas = document.getElementById("chartNormal");
+        // asegúrate que existe
+        if (!canvas) { toast("Canvas de normal no encontrado (id chartNormal)", "error"); return; }
+        const ctx = canvas.getContext("2d");
+
+        // destruir si existe
+        canvas.style.width = "100%";
+        canvas.style.height = "420px";
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = 420;
+
+        if (window.normalChart) window.normalChart.destroy();
+
+        // puntos x,y
+        const x = [], y = [];
+        const minX = mu - 4 * sigma;
+        const maxX = mu + 4 * sigma;
+        for (let val = minX; val <= maxX; val += (maxX - minX) / 160) {
+            x.push(Number(val.toFixed(4)));
+            y.push((1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((val - mu) / sigma, 2)));
+        }
+
+        // sombra entre a y b -> valores fuera son null para que no rellene todo
+        const shaded = x.map((val, i) => (val >= a && val <= b ? y[i] : null));
+
+        const baseBlue = "#0d6efd";
+
+        const datasets = [
+            {
+                label: "Distribución normal",
+                data: y,
+                backgroundColor: chartType === "bar" ? "rgba(13,110,253,0.5)" : "rgba(13,110,253,0.12)",
+                borderColor: baseBlue,
+                borderWidth: 2,
+                tension: 0.35,
+                pointRadius: chartType === "line" ? 3 : 0,
+                fill: false
+            }
+        ];
+
+        // si es linea, añadimos dataset sombreado como area bajo curva (usando spanGaps para ignorar nulls)
+        if (chartType === "line") {
+            datasets.push({
+                label: "Área entre a y b",
+                data: shaded,
+                backgroundColor: "rgba(255,50,50,0.25)",
+                borderColor: "rgba(255,60,60,0.6)",
+                borderWidth: 0,
+                pointRadius: 0,
+                tension: 0.3,
+                fill: true,
+                spanGaps: true
+            });
+        } else {
+            // si es bar, el sombreado no aplica igual; coloreamos barras según si están dentro
+            datasets[0].backgroundColor = x.map(val => (val >= a && val <= b ? "rgba(255,50,50,0.6)" : "rgba(13,110,253,0.5)"));
+        }
+
+        // IMPORTANT: forzar que Chart no mantenga aspect ratio (evita "aplastado")
+        window.normalChart = new Chart(ctx, {
+            type: chartType === "bar" ? "bar" : "line",
+            data: {
+                labels: x,
+                datasets: datasets
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,   // <-- clave para que respete el alto del canvas / CSS
+                plugins: { legend: { display: true } },
+                scales: {
+                  x: {
+                    title: { display: true, text: "x" },
+                    ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--muted') || "#c7d2e1" }
+                  },
+                  y: {
+                    title: { display: true, text: "Densidad" },
+                    ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--muted') || "#c7d2e1" }
+                  }
+                }
+            }
+        });
+
+        toast("Distribución normal calculada", "success");
+
+    } catch (e) {
+        console.error(e);
+        toast("Error calculando la normal", "error");
+    }
+}
+
+
 /*  
    START
      */

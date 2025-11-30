@@ -281,6 +281,53 @@ def binomial_api(n:int, p:float):
         "varianza": varianza
     }
 
+# DISTRIBUCIÓN NORMAL
+from fastapi.responses import StreamingResponse
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.stats import norm
+import io
+
+@app.post("/normal")
+async def normal_api(payload: dict):
+    """
+    Calcula la probabilidad P(a < X < b) para una normal.
+    """
+    mu = payload.get("mu")
+    sigma = payload.get("sigma")
+    a = payload.get("a")
+    b = payload.get("b")
+
+    try:
+        prob = norm.cdf(b, mu, sigma) - norm.cdf(a, mu, sigma)
+        return {"prob": float(prob)}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/normal_plot")
+async def normal_plot(mu: float, sigma: float, a: float, b: float):
+    """
+    Genera una gráfica PNG de la normal y el área sombreada entre a y b.
+    """
+    x = np.linspace(mu - 4*sigma, mu + 4*sigma, 400)
+    y = norm.pdf(x, mu, sigma)
+
+    fig, ax = plt.subplots(figsize=(6, 3))
+    ax.plot(x, y, color="#0d6efd")
+    ax.fill_between(x, y, where=(x >= a) & (x <= b),
+                    color="#0d6efd", alpha=0.4)
+
+    ax.set_title("Distribución Normal")
+    ax.set_xlabel("x")
+    ax.set_ylabel("Densidad")
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png", dpi=150, bbox_inches="tight")
+    buf.seek(0)
+
+    return StreamingResponse(buf, media_type="image/png")
+
  
 # SERVIR WEB
  

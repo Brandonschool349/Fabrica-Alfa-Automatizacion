@@ -165,9 +165,7 @@ html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,
 /* Small card */
 .small-card{ padding:12px; }
 
-/* Chart cards */
-.chart-card{ padding:12px; }
-.chart-card canvas{ width:100% !important; height:260px !important; }
+
 
 /* Buttons */
 .btn{
@@ -248,8 +246,16 @@ html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,
   .sidebar{ display:none; width:0; min-width:0; }
   .main-content{ padding:16px; }
   .grid-3{ grid-template-columns: 1fr; }
+
+  /* Todas las gráficas más compactas en móvil */
   .chart-card canvas{ height:200px !important; }
+
+  /* Excepto la normal que necesita más altura */
+  .normal-chart{
+    height:320px !important;
+  }
 }
+
 
 /* Tiny transitions & accessibility */
 a, button{ transition: all .12s ease; outline:none; }
@@ -501,3 +507,24 @@ box-shadow: inset 6px 6px 12px rgba(0,0,0,0.55), 0 0 8px rgba(106,123,255,0.25);
 :root.light-mode .muted {
     color: #4d5566 !important; /* gris oscuro */
 }
+
+
+/* resultados */
+#normalResults {
+  padding: 10px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 10px;
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+.chart-card canvas{
+    width:100% !important;
+}
+
+/* EXCEPCIÓN: solo la normal tiene más altura */
+.normal-chart{
+    height:700px !important;
+    width: 100% !important;
+}
+
