@@ -110,17 +110,33 @@ def intervalo_confianza_media(series, alpha=0.05):
         "ci_high": float(ci_high)
     }
 
-
-# Prueba t de 1 muestra
+# Prueba t de una muestra
 def prueba_t_uno_muestra(series, mu0=0, alpha=0.05):
     s = series.dropna()
+
+    # Estadísticos
+    media = float(s.mean())
+    sd = float(s.std(ddof=1))
+    n = len(s)
+
+    # Prueba t real
     tstat, pvalue = stats.ttest_1samp(s, popmean=mu0)
 
+    # Conclusión automática
+    if pvalue < alpha:
+        conclusion = "Se rechaza H₀"
+    else:
+        conclusion = "No se rechaza H₀"
+
     return {
-        "tstat": float(tstat),
+        "media": media,
+        "sd": sd,
+        "n": n,
+        "t": float(tstat),
         "pvalue": float(pvalue),
-        "rechazar_H0": bool(pvalue < alpha)
+        "conclusion": conclusion
     }
+
 
 
 # ANOVA compatible

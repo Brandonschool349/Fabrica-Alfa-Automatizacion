@@ -280,6 +280,82 @@ def binomial_api(n:int, p:float):
         "media": media,
         "varianza": varianza
     }
+    # Intervalo de confianza — media o desviación estándar
+@app.post("/intervalo_confianza")
+def api_intervalo_confianza(payload: dict):
+    global df_global
+
+    if df_global is None:
+        return {"error": "No hay datos cargados"}
+
+    col = payload.get("columna")
+    alpha = payload.get("alpha", 0.05)
+    parametro = payload.get("parametro", "media")  # <--- NUEVO
+
+    if col not in df_global.columns:
+        return {"error": "Columna no válida"}
+
+    # Datos numéricos limpios
+    try:
+        datos = df_global[col].dropna().astype(float)
+    except:
+        return {"error": "La columna no es numérica"}
+
+    n = len(datos)
+    sd = float(datos.std(ddof=1))
+
+    # ==========================
+    #   1) INTERVALO MEDIA
+    # ==========================
+    if parametro == "media":
+        media = float(datos.mean())
+        se = sd / (n ** 0.5)
+
+        from scipy.stats import norm
+        z = norm.ppf(1 - alpha/2)
+
+        ci_low = media - z * se
+        ci_high = media + z * se
+
+        return {
+            "tipo": "media",
+            "media": media,
+            "se": se,
+            "n": n,
+            "sd": sd,
+            "ci_low": float(ci_low),
+            "ci_high": float(ci_high)
+        }
+
+    # ==========================
+    #   2) INTERVALO DESVIACIÓN ESTÁNDAR
+    # ==========================
+    elif parametro == "sd":
+        from scipy.stats import chi2
+
+        df = n - 1
+
+        # límites chi-cuadrada
+        chi_low = chi2.ppf(alpha/2, df)
+        chi_high = chi2.ppf(1 - alpha/2, df)
+
+        # intervalo para la desviación estándar
+        ci_low = ((df * sd**2) / chi_high) ** 0.5
+        ci_high = ((df * sd**2) / chi_low) ** 0.5
+
+        return {
+            "tipo": "sd",
+            "sd": sd,
+            "n": n,
+            "ci_low": float(ci_low),
+            "ci_high": float(ci_high)
+        }
+
+    # ==========================
+    #   error de parámetro
+    # ==========================
+    else:
+        return {"error": "Parámetro inválido"}
 
 # DISTRIBUCIÓN NORMAL
 from fastapi.responses import StreamingResponse
@@ -327,6 +403,33 @@ async def normal_plot(mu: float, sigma: float, a: float, b: float):
     buf.seek(0)
 
     return StreamingResponse(buf, media_type="image/png")
+
+# HIPÓTESIS T-TEST
+@app.post("/t_test")
+def api_t_test(payload: dict):
+    global df_global
+    
+    if df_global is None:
+        return {"error": "No hay datos cargados"}
+
+    col = payload.get("columna")
+    mu0 = payload.get("mu0")
+    alpha = payload.get("alpha", 0.05)
+
+    if col not in df_global.columns:
+        return {"error": "Columna inválida"}
+
+    try:
+        datos = df_global[col].dropna().astype(float)
+    except:
+        return {"error": "La columna no es numérica"}
+
+    try:
+        r = prueba_t_uno_muestra(datos, mu0, alpha)
+        return r
+    except Exception as e:
+        return {"error": str(e)}
+
 
  
 # SERVIR WEB

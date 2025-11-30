@@ -142,54 +142,111 @@
           </div>
         </section>
 
-        <!-- ESTADISTICAS VIEW -->
-        <section id="view-estadisticas" class="view-pane hidden">
-          <div class="grid grid-3">
-            <div class="card">
-              <h5>Medidas de tendencia central</h5>
-              <select id="selectTend" class="form-select mt-2"></select>
-              <div style="display:flex; gap:8px; margin-top:10px;">
-                <button id="btnTend" class="btn btn-primary">Calcular</button>
-                <button id="btnTendAuto" class="btn btn-outline-light">Auto</button>
-              </div>
-              <div class="mt-3">
-                <div class="muted">Media</div><div id="mediaVal" class="metric">—</div>
-                <div class="muted">Mediana</div><div id="medianaVal" class="metric">—</div>
-                <div class="muted">Moda</div><div id="modaVal" class="metric">—</div>
-              </div>
-            </div>
+<!-- ESTADISTICAS VIEW -->
+<section id="view-estadisticas" class="view-pane hidden">
+  <div class="grid grid-3">
 
-            <div class="card">
-              <h5>Medidas de dispersión</h5>
-              <select id="selectDisp" class="form-select mt-2"></select>
-              <button id="btnDisp" class="btn btn-warning w-100 mt-3">Calcular</button>
-              <div class="mt-3">
-                <div class="muted">Desviación</div><div id="sdVal" class="metric">—</div>
-                <div class="muted">Varianza</div><div id="varVal" class="metric">—</div>
-                <div class="muted">IQR</div><div id="iqrVal" class="metric">—</div>
-              </div>
-            </div>
+    <!-- CARD 1 - Tendencia central -->
+    <div class="card">
+      <h4>Medidas de tendencia central</h4>
+      <select id="selectTend" class="form-select mt-2"></select>
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <button id="btnTend" class="btn btn-primary">Calcular</button>
+        <button id="btnTendAuto" class="btn btn-outline-light">Auto</button>
+      </div>
+      <div class="mt-3">
+        <div class="muted">Media</div><div id="mediaVal" class="metric">—</div>
+        <div class="muted">Mediana</div><div id="medianaVal" class="metric">—</div>
+        <div class="muted">Moda</div><div id="modaVal" class="metric">—</div>
+      </div>
+    </div>
 
-            <!-- ---- PROBABILIDADES & TESTS ---- -->
-          <div class="card">
-            <h5>Probabilidades & Tests</h5>
+    <!-- CARD 2 - Dispersión -->
+    <div class="card">
+      <h4>Medidas de dispersión</h4>
+      <select id="selectDisp" class="form-select mt-2"></select>
+      <button id="btnDisp" class="btn btn-warning w-100 mt-3">Calcular</button>
+      <div class="mt-3">
+        <div class="muted">Desviación</div><div id="sdVal" class="metric">—</div>
+        <div class="muted">Varianza</div><div id="varVal" class="metric">—</div>
+        <div class="muted">IQR</div><div id="iqrVal" class="metric">—</div>
+      </div>
+    </div>
 
-            <div style="display:flex; gap:8px;">
-              <input id="binN" type="number" class="form-control" placeholder="n">
-              <input id="binP" type="number" class="form-control" step="0.01" placeholder="p">
-            </div>
+    <!-- CARD 3 - Probabilidades Binomial -->
+    <div class="card">
+      <h4>Probabilidades & Tests (Binomial)</h4>
 
-            <button id="btnBinom" class="btn btn-primary w-100 mt-2">
-              Generar Binomial
-            </button>
+      <div style="display:flex; gap:8px;">
+        <input id="binN" type="number" class="form-control" placeholder="n">
+        <input id="binP" type="number" class="form-control" step="0.01" placeholder="p">
+      </div>
 
-            <!-- Aquí VA el gráfico de esta sección -->
-            <canvas id="chartBinomialStats" class="mt-3"></canvas>
+      <button id="btnBinom" class="btn btn-primary w-100 mt-2">Generar Binomial</button>
 
-            <!-- Aquí VA la tabla o texto de resultados -->
-            <div id="probOutputsStats" class="mt-3"></div>
-          </div>
-        </section>
+      <canvas id="chartBinomialStats" class="mt-3"></canvas>
+      <div id="probOutputsStats" class="mt-3"></div>
+    </div>
+
+    <!-- CARD 4 - Prueba t -->
+    <div class="card">
+      <h4>Prueba de Hipótesis — Media (t-test)</h4>
+
+      <label class="mt-2">Columna numérica</label>
+      <select id="ttest_col" class="form-select"></select>
+
+      <label class="mt-2">Media poblacional (μ₀)</label>
+      <input id="ttest_mu0" type="number" class="form-control" placeholder="Ej. 5000">
+
+      <label class="mt-2">Nivel de confianza</label>
+      <select id="ttest_alpha" class="form-select">
+          <option value="0.10">90%</option>
+          <option value="0.05" selected>95%</option>
+          <option value="0.01">99%</option>
+      </select>
+
+      <button class="btn btn-success mt-3 w-100" onclick="calcTTest()">Calcular prueba t</button>
+
+      <div id="ttest_result" class="mt-3"></div>
+      <canvas id="chartTTest" class="mt-3"></canvas>
+    </div>
+
+    <!-- CARD 5 - Intervalo de confianza -->
+    <div class="card">
+      <h4>Intervalo de Confianza — Media</h4>
+
+      <label class="mt-2">Columna numérica</label>
+      <select id="ic_col" class="form-select"></select>
+
+      <label class="mt-2">Nivel de confianza</label>
+      <select id="ic_level" class="form-select">
+          <option value="0.10">90%</option>
+          <option value="0.05" selected>95%</option>
+          <option value="0.01">99%</option>
+      </select>
+
+      <label class="muted small mt-3">Parámetro</label>
+      <select id="ic_param" class="form-select">
+          <option value="media" selected>Media</option>
+          <option value="sd">Desviación estándar</option>
+      </select>
+
+      <button class="btn btn-primary mt-3" onclick="calcIC()">Calcular</button>
+
+      <div id="ic_result" class="mt-3"></div>
+
+      <label class="muted small mt-3">Tipo de gráfico</label>
+      <select id="ic_chart_type" class="form-select">
+          <option value="bar">Barras</option>
+          <option value="points">Línea con puntos</option>
+      </select>
+
+      <canvas id="chartIC" class="mt-3"></canvas>
+    </div>
+
+  </div>
+</section>
+
 
 
 

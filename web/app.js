@@ -375,21 +375,28 @@ function resetData(){
 
 /* populate selectors with backend columns */
 function populateColumnSelectors(cols){
-
   const targets = [
     "#selectTend",
     "#selectDisp",
     "#selectQuick",
 
-    // Selects nuevos
+    // Modelos
     "#selectModelVar",
     "#selectModelGroup",
     "#selectModelX",
     "#selectModelY",
 
+    // Otras herramientas
     "#selectBinomCol",
-    "#selectProdCol"
+    "#selectProdCol",
+
+    // Intervalo de confianza
+    "#ic_col",
+
+    // Prueba t de hipótesis
+    "#ttest_col"
   ];
+
 
   // Llenar todos esos selects con todas las columnas
   targets.forEach(sel => {
@@ -1041,7 +1048,178 @@ async function postNormal() {
         toast("Error calculando la normal", "error");
     }
 }
+let chartIC = null;
 
+// Intervalo de confianza con gráfica
+async function calcIC() {
+    const col = document.getElementById("ic_col").value;
+    const alpha = parseFloat(document.getElementById("ic_level").value);
+    const parametro = document.getElementById("ic_param").value;
+    const tipo = document.getElementById("ic_chart_type").value;
+
+    if (!STATE.raw) {
+        alert("Primero carga un archivo.");
+        return;
+    }
+
+    // Llamada API
+    const resp = await fetch(`${API_BASE}/intervalo_confianza`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            columna: col,
+            alpha: alpha,
+            parametro: parametro   // <--- AQUÍ SE ENVÍA CORRECTAMENTE
+        })
+    });
+
+    const data = await resp.json();
+
+    if (data.error) {
+        alert(data.error);
+        return;
+    }
+
+    // ------- GENERAR TABLA DINÁMICA --------
+    let html = `
+    <table class="anova-table">
+    <tr><th>Medida</th><th>Valor</th></tr>
+    <tr><td>n</td><td>${data.n}</td></tr>
+    `;
+
+    if (data.tipo === "media") {
+        html += `
+        <tr><td>Media</td><td>${data.media.toFixed(4)}</td></tr>
+        <tr><td>Error estándar</td><td>${data.se.toFixed(4)}</td></tr>
+        `;
+    }
+
+    if (data.tipo === "sd") {
+        html += `
+        <tr><td>Desviación estándar</td><td>${data.sd.toFixed(4)}</td></tr>
+        `;
+    }
+
+    html += `
+    <tr><th colspan="2">Intervalo de Confianza</th></tr>
+    <tr><td>Límite inferior</td><td>${data.ci_low.toFixed(4)}</td></tr>
+    <tr><td>Límite superior</td><td>${data.ci_high.toFixed(4)}</td></tr>
+    </table>
+    `;
+
+    document.getElementById("ic_result").innerHTML = html;
+
+    graficarIC(data, tipo);
+}
+
+// ====== GRAFICAR INTERVALO DE CONFIANZA ======
+function graficarIC(data, tipo) {
+    const ctx = document.getElementById("chartIC").getContext("2d");
+
+    if (chartIC) chartIC.destroy();
+
+    let labels, valores;
+
+    if (data.tipo === "media") {
+        labels = ["Límite Inferior", "Media", "Límite Superior"];
+        valores = [data.ci_low, data.media, data.ci_high];
+    }
+
+    if (data.tipo === "sd") {
+        labels = ["Límite Inferior", "Desv Std", "Límite Superior"];
+        valores = [data.ci_low, data.sd, data.ci_high];
+    }
+
+    chartIC = new Chart(ctx, {
+        type: tipo === "bar" ? "bar" : "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Intervalo de Confianza",
+                data: valores,
+                borderWidth: 2,
+                pointRadius: 6
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: false } }
+        }
+    });
+}
+
+let chartTTest = null;
+
+// ====== PRUEBA T PARA LA MEDIA ======
+async function calcTTest() {
+
+    const col = document.getElementById("ttest_col").value;
+    const mu0 = parseFloat(document.getElementById("ttest_mu0").value);
+    const alpha = parseFloat(document.getElementById("ttest_alpha").value);
+
+    if (!col || isNaN(mu0)) {
+        alert("Selecciona una columna y un valor de mu0.");
+        return;
+    }
+
+    if (!STATE.raw) {
+        alert("Carga primero un archivo.");
+        return;
+    }
+
+    // === pedir datos al backend ===
+    const resp = await fetch(`${API_BASE}/t_test`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            columna: col,
+            mu0: mu0,
+            alpha: alpha
+        })
+    });
+
+    const data = await resp.json();
+
+    if (data.error) {
+        alert(data.error);
+        return;
+    }
+
+    // === Mostrar resultados bonitos ===
+    document.getElementById("ttest_result").innerHTML = `
+        <table class="anova-table">
+            <tr><th>Medida</th><th>Valor</th></tr>
+            <tr><td>Media muestral</td><td>${data.media.toFixed(4)}</td></tr>
+            <tr><td>Desviación estándar</td><td>${data.sd.toFixed(4)}</td></tr>
+            <tr><td>n</td><td>${data.n}</td></tr>
+            <tr><td>t estadístico</td><td>${data.t.toFixed(4)}</td></tr>
+            <tr><td>p-valor</td><td>${data.pvalue.toFixed(6)}</td></tr>
+            <tr><th>Decisión</th><th>${data.conclusion}</th></tr>
+        </table>
+    `;
+
+    // === GRAFICAR: media vs mu0 ===
+    const ctx = document.getElementById("chartTTest").getContext("2d");
+
+    if (chartTTest) chartTTest.destroy();
+
+    chartTTest = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Media muestral", "μ₀ (hipótesis)"],
+            datasets: [{
+                data: [data.media, mu0],
+                backgroundColor: ["rgba(0,150,255,0.6)", "rgba(255,80,80,0.7)"]
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: false }
+            }
+        }
+    });
+}
 
 /*  
    START
