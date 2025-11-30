@@ -1,5 +1,14 @@
 Pastebin's Fabrica Alfa
 
+Links:
+https://pastebin.com/mBBL2HzZ
+https://pastebin.com/N99m9mgn
+https://pastebin.com/ka3z0e83
+https://pastebin.com/?__cf_chl_tk=M5MKevDd9GLdMHPs6b3E.jfdjQiy65FRZNc_TYZ1OxI-1764338449-1.0.1.1-DlDu0InLk855WrJ4K.NX1q1RvQi_avAqKIhqTZW18A8
+https://pastebin.com/R2f0d0Le
+https://pastebin.com/JgwtLB3q
+https://pastebin.com/rbBKR36y
+https://pastebin.com/K1DiTc7H
 
 
 Correlación base de datos
@@ -156,4 +165,5 @@ text(x = bp,
      y = valores + 0.05,
      labels = paste0(valores*100, "%"),
      cex = 1)
+
  
