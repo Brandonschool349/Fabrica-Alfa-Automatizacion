@@ -55,6 +55,20 @@ html,body{ height:100%; margin:0; padding:0; background: linear-gradient(180deg,
   box-shadow: 0 10px 30px rgba(106,90,249,0.12);
   font-size:18px;
 }
+/* Logo como imagen (png, jpg, etc) */
+.logo-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Si algo le está ganando, forzamos */
+.brand img {
+  max-width: 50px !important;
+  max-height: 50px !important;
+}
+
 .brand-text .title { color: #dbe9ff; font-weight:700; font-size:0.95rem; }
 .brand-text .subtitle { color: var(--muted); font-size:0.8rem; margin-top:2px; }
 
