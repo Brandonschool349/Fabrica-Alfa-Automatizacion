@@ -60,7 +60,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
   <li>Trazabilidad e integración total.</li>
 </ul>
 
-<h3>✔ Módulos actuales (esenciales)</h3>
+<h3> Módulos actuales (esenciales)</h3>
 <ul>
   <li>Login</li>
   <li>Carga de archivos</li>
