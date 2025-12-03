@@ -3,7 +3,7 @@
 
 <hr/>
 
-<h2>🏭 1. Descripción General del Proyecto</h2>
+<h2> 1. Descripción General del Proyecto</h2>
 <p>
 Este repositorio contiene el desarrollo de una <b>plataforma web integral</b> creada para automatizar, analizar y mejorar los procesos operativos de <b>Fábrica Alfa</b>, una empresa manufacturera dedicada a la producción de envases plásticos sostenibles ubicada en Apodaca, Nuevo León.
 </p>
@@ -12,9 +12,9 @@ Este repositorio contiene el desarrollo de una <b>plataforma web integral</b> cr
 
 <hr/>
 
-<h2>🔍 2. Planteamiento del Problema</h2>
+<h2> 2. Planteamiento del Problema</h2>
 
-<h3>❗ Problemas detectados</h3>
+<h3> Problemas detectados</h3>
 <ul>
   <li>Registros manuales en Excel → errores y retrasos.</li>
   <li>Falta de integración entre Ventas, Inventario y Producción.</li>
@@ -39,7 +39,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
 
 <hr/>
 
-<h2>🛠️ 4. Análisis AS-IS (Situación Actual)</h2>
+<h2> 4. Análisis AS-IS (Situación Actual)</h2>
 <ul>
   <li>Procesos manuales en hojas de cálculo.</li>
   <li>Falta de comunicación entre áreas.</li>
@@ -49,7 +49,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
 
 <hr/>
 
-<h2>🌟 5. Modelo TO-BE (Solución Propuesta)</h2>
+<h2> 5. Modelo TO-BE (Solución Propuesta)</h2>
 <p>Se propone una plataforma totalmente digital que incorpore:</p>
 <ul>
   <li>Dashboard estadístico automatizado.</li>
@@ -75,7 +75,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
   <li>Modo día/noche</li>
 </ul>
 
-<h3>⏳ Módulos en desarrollo </h3>
+<h3> Módulos en desarrollo </h3>
 <ul>
   <li>Registro de operario (Listo, pero no conectado a una base de datos)</li>
   <li>Control de producción (Listo, pero no conectado a una base de datos)</li>
@@ -85,15 +85,15 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
 
 <hr/>
 
-<h2>🖥️ 6. Características de la Página Web</h2>
+<h2> 6. Características de la Página Web</h2>
 
-<h3>🔐 Login</h3>
+<h3> Login</h3>
 <p>Acceso seguro a la plataforma.</p>
 
 <h3>📁 Carga de archivos</h3>
 <p>Permite subir Excel o CSV para análisis directo.</p>
 
-<h3>📊 Dashboard estadístico</h3>
+<h3> Dashboard estadístico</h3>
 <ul>
   <li>Media, mediana, moda</li>
   <li>Varianza y desviación estándar</li>
@@ -101,24 +101,24 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
   <li>Interpretación automática</li>
 </ul>
 
-<h3>🔍 Búsqueda inteligente</h3>
+<h3> Búsqueda inteligente</h3>
 <p>Filtrado por cliente, pedido o responsable.</p>
 
-<h3>🌙 Modo día/noche</h3>
+<h3> Modo día/noche</h3>
 <p>Cambia el tema visual para mejor experiencia.</p>
 
-<h3>🎲 Distribuciones</h3>
+<h3> Distribuciones</h3>
 <ul>
   <li><b>Binomial</b>: representación y cálculo</li>
   <li><b>Poisson</b>: eventos por intervalo</li>
 </ul>
 
-<h3>🧪 ANOVA</h3>
+<h3> ANOVA</h3>
 <p>Comparación de medias entre grupos con interpretación.</p>
 
 <hr/>
 
-<h2>🧩 7. Arquitectura del Sistema</h2>
+<h2> 7. Arquitectura del Sistema</h2>
 
 <h3>Frontend</h3>
 <ul>
@@ -142,7 +142,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
 
 <hr/>
 
-<h2>🧪 8. Análisis Estadísticos Realizados</h2>
+<h2> 8. Análisis Estadísticos Realizados</h2>
 <ul>
   <li>Medidas de tendencia central</li>
   <li>Medidas de dispersión</li>
@@ -154,7 +154,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
 
 <hr/>
 
-<h2>📦 9. Módulos del Sistema</h2>
+<h2> 9. Módulos del Sistema</h2>
 
 <table>
   <tr>
@@ -175,7 +175,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
 
 <hr/>
 
-<h2>🗂️ 10. Pruebas del Cliente</h2>
+<h2> 10. Pruebas del Cliente</h2>
 <ul>
   <li>Login</li>
   <li>Carga de archivos</li>
@@ -188,7 +188,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
 
 <hr/>
 
-<h2>📚 11. Glosario</h2>
+<h2> 11. Glosario</h2>
 <ul>
   <li><b>AS-IS:</b> Estado actual del proceso</li>
   <li><b>TO-BE:</b> Estado propuesto futuro</li>
@@ -199,7 +199,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
 
 <hr/>
 
-<h2>📖 12. Bibliografía (APA)</h2>
+<h2> 12. Bibliografía (APA)</h2>
 <ul>
   <li>Illowsky & Dean. <i>Introducción a la estadística</i>. OpenStax.</li>
   <li>Demoss. <i>Estadística descriptiva</i>.</li>
@@ -208,7 +208,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
 
 <hr/>
 
-<h2>👥 13. Equipo TECHNOIDS</h2>
+<h2> 13. Equipo TECHNOIDS</h2>
 <ul>
   <li><b>Brandon Alejandro Pedraza Valdez</b> — Líder y programador</li>
   <li><b>Juan Pablo Arce Jáuregui</b> — Desarrollador</li>
