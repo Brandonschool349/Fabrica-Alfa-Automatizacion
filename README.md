@@ -32,7 +32,7 @@ Este repositorio contiene el desarrollo de una <b>plataforma web integral</b> cr
 
 <hr/>
 
-<h2>🎯 3. Objetivo del Proyecto</h2>
+<h2> 3. Objetivo del Proyecto</h2>
 <p>
 Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar métricas en tiempo real, cargar bases de datos, generar análisis estadísticos completos y establecer las bases para la trazabilidad total de la producción.
 </p>
