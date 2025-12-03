@@ -22,7 +22,7 @@ Este repositorio contiene el desarrollo de una <b>plataforma web integral</b> cr
   <li>Ausencia de análisis estadístico para decisiones.</li>
 </ul>
 
-<h3>🎯 Consecuencias</h3>
+<h3> Consecuencias</h3>
 <ul>
   <li>Baja eficiencia operativa.</li>
   <li>Costos elevados.</li>
@@ -90,7 +90,7 @@ Construir un <b>sistema web</b> que permita automatizar cálculos, visualizar m�
 <h3> Login</h3>
 <p>Acceso seguro a la plataforma.</p>
 
-<h3>📁 Carga de archivos</h3>
+<h3> Carga de archivos</h3>
 <p>Permite subir Excel o CSV para análisis directo.</p>
 
 <h3> Dashboard estadístico</h3>
